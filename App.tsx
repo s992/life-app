@@ -1,22 +1,115 @@
 import React from 'react';
 import {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, View, FlatList} from 'react-native';
+import {Button, Header, Icon, ListItem, Text} from 'react-native-elements';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import {Color} from './colors';
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
+interface Props {}
+interface State {
+  page: Page;
+}
+
+enum Page {
+  Button,
+  List,
+}
+
+export default class App extends Component<Props, State> {
+  state = {
+    page: Page.Button,
+  };
+
+  setPage = (page: Page) => this.setState(state => ({...state, page}));
+
+  renderButton() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+      <Button
+        buttonStyle={styles.button}
+        color={Color.White}
+        title="Something Happened."
+        large
+        onPress={() => this.setPage(Page.List)}
+      />
+    );
+  }
+
+  renderList() {
+    const items = [
+      {name: 'woke up'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+      {name: 'woke up'},
+      {name: 'woke up'},
+      {name: 'woke up'},
+      {name: 'woke up'},
+      {name: 'woke up'},
+      {name: 'woke up'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+      {name: 'went to sleep'},
+      {name: 'ryan sucks'},
+    ];
+    const keyExtractor = (item, index) => item.name;
+    const renderItem = ({ item }) => <ListItem title={item.name} onPress={() => this.setPage(Page.Button)} hideChevron />;
+
+    return (
+      <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
+        <FlatList style={{width: '100%'}} keyExtractor={keyExtractor} data={items} renderItem={renderItem} />
+      </View>
+    );
+  }
+
+  whoops() {
+    return <Text h1>you done fukt up</Text>;
+  }
+
+  renderHome() {
+    return (
+      <Icon
+        name="home"
+        color={Color.White}
+        underlayColor={Color.Black}
+        onPress={() => this.setPage(Page.Button)}
+      />
+    );
+  }
+
+  render() {
+    const {page} = this.state;
+    let view;
+
+    switch (page) {
+      case Page.Button:
+        view = this.renderButton();
+        break;
+      case Page.List:
+        view = this.renderList();
+        break;
+      default:
+        view = this.whoops();
+    }
+
+    return (
+      <View style={{flex: 1}}>
+        <Header
+          leftComponent={{icon: 'menu', color: Color.White}}
+          centerComponent={{
+            text: 'LIFE',
+            style: {color: Color.White, fontFamily: 'Roboto'},
+          }}
+          rightComponent={this.renderHome()}
+          backgroundColor={Color.Black}
+        />
+        <View style={styles.container}>{view}</View>
       </View>
     );
   }
@@ -27,16 +120,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: Color.White,
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  button: {
+    backgroundColor: Color.Red,
+    height: '60%',
   },
 });
