@@ -1,21 +1,12 @@
 import React from 'react';
 import {Component} from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
-import {Header, Icon, Text} from 'react-native-elements';
+import {Header, Icon} from 'react-native-elements';
+import {StackNavigator} from 'react-navigation';
 
 import {Color} from './colors';
-
-import {SomethingHappenedButton} from './components/something-happened-button';
-import {List} from './components/list';
-
-interface State {
-  page: Page;
-}
-
-enum Page {
-  Button,
-  List,
-}
+import MainScreen from './screens/main';
+import ListScreen from './screens/list';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,71 +21,28 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends Component<{}, State> {
-  state = {
-    page: Page.Button,
-  };
+const RootStack = StackNavigator(
+  {
+    Main: MainScreen,
+    List: ListScreen,
+  },
+  {initialRouteName: 'Main', headerMode: 'none'},
+);
 
-  setPage = (page: Page) => this.setState(state => ({...state, page}));
-
-  renderButton() {
-    return <SomethingHappenedButton onClick={() => this.setPage(Page.List)} />;
-  }
-
-  renderList() {
-    const items = [
-      {id: '' + Math.random(), name: 'woke up'},
-      {id: '' + Math.random(), name: 'went to sleep'},
-      {id: '' + Math.random(), name: 'ate a meal'},
-      {id: '' + Math.random(), name: 'ate a snack'},
-      {id: '' + Math.random(), name: 'exercised'},
-    ];
-
-    return <List onClick={() => this.setPage(Page.Button)} items={items} />;
-  }
-
-  whoops() {
-    return <Text h1>this page shouldnt exist</Text>;
-  }
-
-  renderHome() {
-    return (
-      <Icon
-        name={this.state.page === Page.Button ? 'help-outline' : 'home'}
-        color={Color.White}
-        underlayColor={Color.Black}
-        onPress={() => this.setPage(Page.Button)}
-      />
-    );
-  }
-
+export default class App extends Component {
   render() {
-    const {page} = this.state;
-    let view;
-
-    switch (page) {
-      case Page.Button:
-        view = this.renderButton();
-        break;
-      case Page.List:
-        view = this.renderList();
-        break;
-      default:
-        view = this.whoops();
-    }
-
     return (
       <View style={{flex: 1, backgroundColor: Color.White}}>
         <Header
           leftComponent={{icon: 'menu', color: Color.White}}
           centerComponent={{
             text: 'LIFE',
-            style: {color: Color.White, fontFamily: 'Roboto'},
+            style: {color: Color.White},
           }}
-          rightComponent={this.renderHome()}
+          rightComponent={{icon: 'home', color: Color.White}}
           backgroundColor={Color.Black}
         />
-        <View style={styles.container}>{view}</View>
+        <RootStack />
       </View>
     );
   }

@@ -1,8 +1,7 @@
 import React from 'react';
 import {Component} from 'react';
-import {StyleSheet, FlatList, ListRenderItemInfo} from 'react-native';
+import {StyleSheet, FlatList, ListRenderItemInfo, View} from 'react-native';
 import {ListItem} from 'react-native-elements';
-import * as Animatable from 'react-native-animatable';
 
 import {Color} from '../colors';
 import {Item} from '../model/item';
@@ -33,14 +32,14 @@ export class List extends React.Component<Props> {
     );
 
     return (
-      <Animatable.View style={styles.container} animation="fadeIn">
+      <View style={styles.container}>
         <FlatList
           style={styles.flatList}
           keyExtractor={keyExtractor}
           data={items}
           renderItem={renderItem}
         />
-      </Animatable.View>
+      </View>
     );
   }
 }
