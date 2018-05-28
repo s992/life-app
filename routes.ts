@@ -5,6 +5,7 @@ import {Color} from './colors';
 import Navigation from './navigation';
 import MainScreen from './screens/main';
 import ListScreen from './screens/list';
+import SettingsScreen from './screens/settings';
 
 const styles = StyleSheet.create({
   drawer: {
@@ -24,7 +25,7 @@ export const MainStack = StackNavigator(
 );
 
 export const RootDrawer = DrawerNavigator(
-  {Home: MainStack},
+  {Home: MainStack, Settings: SettingsScreen},
   {
     style: styles.drawer,
     contentOptions: {labelStyle: styles.drawerTxt},
