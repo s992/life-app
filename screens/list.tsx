@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class ListScreen extends Component<NavigationScreenProps, {}> {
+export default class ListScreen extends Component<NavigationScreenProps> {
   render() {
     const items = [
       {id: '' + Math.random(), name: 'woke up'},
@@ -25,7 +25,7 @@ export default class ListScreen extends Component<NavigationScreenProps, {}> {
       {id: '' + Math.random(), name: 'exercised'},
     ];
     return (
-      <View style={{flex: 1, backgroundColor: Color.White}}>
+      <View style={styles.container}>
         <List
           items={items}
           onClick={() => this.props.navigation.navigate('Main')}

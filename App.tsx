@@ -5,70 +5,34 @@ import {Header, Icon} from 'react-native-elements';
 import {StackNavigator, DrawerNavigator} from 'react-navigation';
 
 import {Color} from './colors';
+import {RootDrawer} from './routes';
 import Navigation from './navigation';
-import MainScreen from './screens/main';
-import ListScreen from './screens/list';
+
+import HeaderIcon from './components/header-icon';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: Color.White,
-  },
-  button: {
-    backgroundColor: Color.Red,
-    height: '60%',
-  },
-  drawer: {
-    backgroundColor: Color.Black,
-  },
-  drawerTxt: {
-    color: Color.White,
   },
 });
 
-const RootStack = StackNavigator(
-  {
-    Main: MainScreen,
-    List: ListScreen,
-  },
-  {initialRouteName: 'Main', headerMode: 'none'},
-);
-
-const RootDrawer = DrawerNavigator(
-  {Home: RootStack},
-  {
-    style: styles.drawer,
-    contentOptions: {labelStyle: styles.drawerTxt},
-  },
-);
-
 export default class App extends Component {
-  renderMenu() {
-    return (
-      <Icon
-        name="menu"
-        color={Color.White}
-        underlayColor={Color.Black}
-        onPress={() => Navigation.toggleDrawer()}
-      />
-    );
-  }
-
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: Color.White}}>
+      <View style={styles.container}>
         <Header
-          leftComponent={this.renderMenu()}
+          leftComponent={
+            <HeaderIcon name="menu" onClick={() => Navigation.toggleDrawer()} />
+          }
           centerComponent={{
             text: 'LIFE',
             style: {color: Color.White},
           }}
-          rightComponent={{icon: 'help-outline', color: Color.White}}
+          rightComponent={<HeaderIcon name="help-outline" onClick={() => {}} />}
           backgroundColor={Color.Black}
         />
-        <RootDrawer ref={(nref: any) => Navigation.setNav(nref)} />
+        <RootDrawer ref={(ref: any) => Navigation.setNav(ref)} />
       </View>
     );
   }

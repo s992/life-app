@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MainScreen extends Component<NavigationScreenProps, {}> {
+export default class MainScreen extends Component<NavigationScreenProps> {
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: Color.White}}>
+      <View style={styles.container}>
         <SomethingHappenedButton
           onClick={() => this.props.navigation.navigate('List')}
         />
