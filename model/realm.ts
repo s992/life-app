@@ -6,6 +6,17 @@ export enum Model {
   TrackedItem = 'TrackedItem',
 }
 
+export interface ItemModel {
+  id: string;
+  name: string;
+}
+
+export interface TrackedItemModel {
+  id: string;
+  timestamp: Date;
+  item: ItemModel;
+}
+
 export class Item {
   static schema = {
     name: Model.Item,
@@ -23,7 +34,7 @@ export class Item {
   }
 
   static all() {
-    return db.objects(Model.Item);
+    return db.objects<ItemModel>(Model.Item);
   }
 }
 
@@ -45,7 +56,7 @@ export class TrackedItem {
   }
 
   static all() {
-    return db.objects(Model.Item);
+    return db.objects<TrackedItemModel>(Model.TrackedItem).sorted('timestamp', true);
   }
 }
 

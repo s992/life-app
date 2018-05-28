@@ -6,6 +6,7 @@ import Navigation from './navigation';
 import MainScreen from './screens/main';
 import ListScreen from './screens/list';
 import SettingsScreen from './screens/settings';
+import LogScreen from './screens/log';
 
 const styles = StyleSheet.create({
   drawer: {
@@ -25,7 +26,7 @@ export const MainStack = StackNavigator(
 );
 
 export const RootDrawer = DrawerNavigator(
-  {Home: MainStack, Settings: SettingsScreen},
+  {Home: MainStack, Log: LogScreen, Settings: SettingsScreen},
   {
     style: styles.drawer,
     contentOptions: {labelStyle: styles.drawerTxt},
