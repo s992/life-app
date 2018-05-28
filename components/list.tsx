@@ -8,7 +8,7 @@ import {Item} from '../model/item';
 
 export interface Props {
   items: Item[];
-  onClick: () => void;
+  onClick: (item: Item) => void;
 }
 
 const styles = StyleSheet.create({
@@ -28,7 +28,7 @@ export class List extends React.Component<Props> {
     const {items, onClick} = this.props;
     const keyExtractor = (item: Item) => item.id;
     const renderItem = ({item}: ListRenderItemInfo<Item>) => (
-      <ListItem title={item.name} onPress={() => onClick()} hideChevron />
+      <ListItem title={item.name} onPress={() => onClick(item)} hideChevron />
     );
 
     return (
