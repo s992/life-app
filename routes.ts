@@ -2,10 +2,15 @@ import { StyleSheet } from 'react-native'
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import { Color } from './colors'
-import MainScreen from './screens/main'
-import ListScreen from './screens/list'
-import SettingsScreen from './screens/settings'
-import LogScreen from './screens/log'
+import { ListScreen, LogScreen, MainScreen, SettingsScreen } from './screens'
+
+export enum Screen {
+  Main = 'Main',
+  List = 'List',
+  Home = 'Home',
+  Log = 'Log',
+  Settings = 'Settings',
+}
 
 const styles = StyleSheet.create({
   drawer: {
@@ -18,15 +23,23 @@ const styles = StyleSheet.create({
 
 export const MainStack = StackNavigator(
   {
-    Main: MainScreen,
-    List: ListScreen,
+    [Screen.Home]: MainScreen,
+    [Screen.List]: ListScreen,
   },
-  { initialRouteName: 'Main', headerMode: 'none' },
+  {
+    initialRouteName: Screen.Home,
+    headerMode: 'none',
+  },
 )
 
 export const RootDrawer = DrawerNavigator(
-  { Home: MainStack, Log: LogScreen, Settings: SettingsScreen },
   {
+    [Screen.Home]: MainStack,
+    [Screen.Log]: LogScreen,
+    [Screen.Settings]: SettingsScreen,
+  },
+  {
+    initialRouteName: Screen.Home,
     style: styles.drawer,
     contentOptions: { labelStyle: styles.drawerTxt },
   },

@@ -49,7 +49,7 @@ export class TrackedItem {
     },
   }
 
-  static create(item: any) {
+  static create(item: ItemModel) {
     db.write(() => {
       db.create(Model.TrackedItem, { id: uuid(), timestamp: new Date(), item })
     })

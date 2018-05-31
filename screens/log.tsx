@@ -1,11 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import {
-  StyleSheet,
-  View,
-  SectionList,
-  ListRenderItemInfo,
-} from 'react-native'
+import { StyleSheet, View, SectionList, ListRenderItemInfo } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { ListItem, Text } from 'react-native-elements'
 import { format } from 'date-fns'
@@ -35,6 +30,10 @@ const styles = StyleSheet.create({
   },
 })
 
+interface TrackedItemsByDate {
+  [key: string]: TrackedItemModel[]
+}
+
 export default class LogScreen extends Component<NavigationScreenProps> {
   render() {
     const items = TrackedItem.all()
@@ -54,8 +53,8 @@ export default class LogScreen extends Component<NavigationScreenProps> {
       />
     )
 
-    const byDay: { [key: string]: TrackedItemModel[] } = items.reduce(
-      (accum: { [key: string]: TrackedItemModel[] }, item) => {
+    const byDay: TrackedItemsByDate = items.reduce(
+      (accum: TrackedItemsByDate, item) => {
         const date = format(item.timestamp, 'MM/DD/YY')
 
         if (!accum[date]) {
