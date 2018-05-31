@@ -1,11 +1,11 @@
-import React from 'react';
-import {Component} from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
-import {Button} from 'react-native-elements';
+import React from 'react'
+import { Component } from 'react'
+import { StyleSheet, View, Alert } from 'react-native'
+import { NavigationScreenProps } from 'react-navigation'
+import { Button } from 'react-native-elements'
 
-import {Color} from '../colors';
-import {TrackedItem, realm} from '../model/realm';
+import { Color } from '../colors'
+import { TrackedItem, realm } from '../model/realm'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,20 +17,21 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 8,
   },
-});
+})
 
 export default class SettingsScreen extends Component<NavigationScreenProps> {
   onDeleteClicked = () => {
-    Alert.alert('Are you sure?', 'Once you delete your tracked items, they cannot be recovered.', [
-      {text: 'Cancel'},
-      {text: 'Delete', onPress: this.onDeleteConfirmed}
-    ])
+    Alert.alert(
+      'Are you sure?',
+      'Once you delete your tracked items, they cannot be recovered.',
+      [{ text: 'Cancel' }, { text: 'Delete', onPress: this.onDeleteConfirmed }],
+    )
   }
 
   onDeleteConfirmed = () => {
-    const items = TrackedItem.all();
+    const items = TrackedItem.all()
 
-    realm.write(() => realm.delete(items));
+    realm.write(() => realm.delete(items))
   }
 
   render() {
@@ -38,12 +39,16 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
       <View style={styles.container}>
         <Button
           containerViewStyle={styles.buttonContainer}
-          buttonStyle={{backgroundColor: Color.Red, padding: 12, justifyContent: 'space-between'}}
-          iconRight={{name: 'trash', type: 'font-awesome'}}
+          buttonStyle={{
+            backgroundColor: Color.Red,
+            padding: 12,
+            justifyContent: 'space-between',
+          }}
+          iconRight={{ name: 'trash', type: 'font-awesome' }}
           title="Delete all entries"
           onPress={this.onDeleteClicked}
         />
       </View>
-    );
+    )
   }
 }

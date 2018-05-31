@@ -1,17 +1,17 @@
-import {DrawerActions, NavigationProp} from 'react-navigation';
+import { DrawerActions, NavigationProp } from 'react-navigation'
 
 class NavigationService {
-  private navigator: NavigationProp<any>;
+  private navigator: NavigationProp<any>
 
   setNav(ref: NavigationProp<any>) {
-    this.navigator = ref;
+    this.navigator = ref
   }
 
   toggleDrawer() {
-    this.navigator.dispatch(DrawerActions.toggleDrawer());
+    this.navigator.dispatch(DrawerActions.toggleDrawer())
   }
 }
 
-const service = new NavigationService();
+const service = new NavigationService()
 
-export default service;
+export default service

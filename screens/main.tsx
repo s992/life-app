@@ -1,10 +1,10 @@
-import React from 'react';
-import {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
+import React from 'react'
+import { Component } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { NavigationScreenProps } from 'react-navigation'
 
-import {Color} from '../colors';
-import {SomethingHappenedButton} from '../components/something-happened-button';
+import { Color } from '../colors'
+import { SomethingHappenedButton } from '../components/something-happened-button'
 
 const styles = StyleSheet.create({
   container: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Color.White,
   },
-});
+})
 
 export default class MainScreen extends Component<NavigationScreenProps> {
   render() {
@@ -23,6 +23,6 @@ export default class MainScreen extends Component<NavigationScreenProps> {
           onClick={() => this.props.navigation.navigate('List')}
         />
       </View>
-    );
+    )
   }
 }

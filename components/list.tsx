@@ -1,14 +1,14 @@
-import React from 'react';
-import {Component} from 'react';
-import {StyleSheet, FlatList, ListRenderItemInfo, View} from 'react-native';
-import {ListItem} from 'react-native-elements';
+import React from 'react'
+import { Component } from 'react'
+import { StyleSheet, FlatList, ListRenderItemInfo, View } from 'react-native'
+import { ListItem } from 'react-native-elements'
 
-import {Color} from '../colors';
-import {Item} from '../model/item';
+import { Item } from '../model/item'
+import { ItemModel } from '../model/realm'
 
 export interface Props {
-  items: Item[];
-  onClick: (item: Item) => void;
+  items: ReadonlyArray<ItemModel>
+  onClick: (item: Item) => void
 }
 
 const styles = StyleSheet.create({
@@ -21,15 +21,15 @@ const styles = StyleSheet.create({
   flatList: {
     width: '100%',
   },
-});
+})
 
-export class List extends React.Component<Props> {
+export class List extends Component<Props> {
   render() {
-    const {items, onClick} = this.props;
-    const keyExtractor = (item: Item) => item.id;
-    const renderItem = ({item}: ListRenderItemInfo<Item>) => (
+    const { items, onClick } = this.props
+    const keyExtractor = (item: Item) => item.id
+    const renderItem = ({ item }: ListRenderItemInfo<Item>) => (
       <ListItem title={item.name} onPress={() => onClick(item)} hideChevron />
-    );
+    )
 
     return (
       <View style={styles.container}>
@@ -40,6 +40,6 @@ export class List extends React.Component<Props> {
           renderItem={renderItem}
         />
       </View>
-    );
+    )
   }
 }

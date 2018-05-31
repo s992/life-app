@@ -1,13 +1,13 @@
-import React from 'react';
-import {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {Button} from 'react-native-elements';
-import * as Animatable from 'react-native-animatable';
+import React from 'react'
+import { Component } from 'react'
+import { StyleSheet } from 'react-native'
+import { Button } from 'react-native-elements'
+import * as Animatable from 'react-native-animatable'
 
-import {Color} from '../colors';
+import { Color } from '../colors'
 
 export interface Props {
-  onClick: () => void;
+  onClick: () => void
 }
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+})
 
 export class SomethingHappenedButton extends React.Component<Props> {
   render() {
@@ -34,6 +34,6 @@ export class SomethingHappenedButton extends React.Component<Props> {
           onPress={() => this.props.onClick()}
         />
       </Animatable.View>
-    );
+    )
   }
 }

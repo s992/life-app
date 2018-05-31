@@ -1,12 +1,12 @@
-import React from 'react';
-import {Component} from 'react';
-import {Icon} from 'react-native-elements';
+import React from 'react'
+import { Component } from 'react'
+import { Icon } from 'react-native-elements'
 
-import {Color} from '../colors';
+import { Color } from '../colors'
 
 export interface Props {
-  name: string;
-  onClick: () => void;
+  name: string
+  onClick: () => void
 }
 
 export default class HeaderIcon extends Component<Props> {
@@ -18,6 +18,6 @@ export default class HeaderIcon extends Component<Props> {
         underlayColor={Color.Black}
         onPress={() => this.props.onClick()}
       />
-    );
+    )
   }
 }
