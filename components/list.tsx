@@ -3,12 +3,11 @@ import { Component } from 'react'
 import { StyleSheet, FlatList, ListRenderItemInfo, View } from 'react-native'
 import { ListItem } from 'react-native-elements'
 
-import { Item } from '../model/item'
 import { ItemModel } from '../model/realm'
 
 export interface Props {
   items: ReadonlyArray<ItemModel>
-  onClick: (item: Item) => void
+  onClick: (item: ItemModel) => void
 }
 
 const styles = StyleSheet.create({
@@ -26,8 +25,8 @@ const styles = StyleSheet.create({
 export class List extends Component<Props> {
   render() {
     const { items, onClick } = this.props
-    const keyExtractor = (item: Item) => item.id
-    const renderItem = ({ item }: ListRenderItemInfo<Item>) => (
+    const keyExtractor = (item: ItemModel) => item.id
+    const renderItem = ({ item }: ListRenderItemInfo<ItemModel>) => (
       <ListItem title={item.name} onPress={() => onClick(item)} hideChevron />
     )
 

@@ -3,7 +3,6 @@ import { Component } from 'react'
 import {
   StyleSheet,
   View,
-  FlatList,
   SectionList,
   ListRenderItemInfo,
 } from 'react-native'
@@ -56,7 +55,7 @@ export default class LogScreen extends Component<NavigationScreenProps> {
     )
 
     const byDay: { [key: string]: TrackedItemModel[] } = items.reduce(
-      (accum, item) => {
+      (accum: { [key: string]: TrackedItemModel[] }, item) => {
         const date = format(item.timestamp, 'MM/DD/YY')
 
         if (!accum[date]) {

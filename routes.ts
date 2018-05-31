@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native'
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import { Color } from './colors'
-import Navigation from './navigation'
 import MainScreen from './screens/main'
 import ListScreen from './screens/list'
 import SettingsScreen from './screens/settings'

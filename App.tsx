@@ -1,8 +1,7 @@
 import React from 'react'
 import { Component } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
-import { Header, Icon } from 'react-native-elements'
-import { StackNavigator, DrawerNavigator } from 'react-navigation'
+import { StyleSheet, View } from 'react-native'
+import { Header } from 'react-native-elements'
 
 import { Color } from './colors'
 import { RootDrawer } from './routes'

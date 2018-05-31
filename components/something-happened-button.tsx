@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export class SomethingHappenedButton extends React.Component<Props> {
+export class SomethingHappenedButton extends Component<Props> {
   render() {
     return (
       <Animatable.View style={styles.container} animation="fadeIn">
