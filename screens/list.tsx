@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 export default class ListScreen extends Component<NavigationScreenProps> {
   onItemSelected = (item: ItemModel) => {
     TrackedItem.create(item)
-    this.props.navigation.navigate(Screen.Main)
+    this.props.navigation.navigate(Screen.Home)
   }
 
   render() {

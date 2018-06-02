@@ -1,26 +1,22 @@
 import { StyleSheet } from 'react-native'
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
-<<<<<<< HEAD
 import { Color } from './colors'
-import { ListScreen, LogScreen, MainScreen, SettingsScreen } from './screens'
+import {
+  AddItemScreen,
+  ListScreen,
+  LogScreen,
+  MainScreen,
+  SettingsScreen,
+} from './screens'
 
 export enum Screen {
-  Main = 'Main',
   List = 'List',
   Home = 'Home',
   Log = 'Log',
   Settings = 'Settings',
+  AddItem = 'AddItem',
 }
-=======
-import {Color} from './colors';
-import Navigation from './navigation';
-import MainScreen from './screens/main';
-import ListScreen from './screens/list';
-import SettingsScreen from './screens/settings';
-import AddItemScreen from './screens/add-item';
-import LogScreen from './screens/log';
->>>>>>> wip adding items
 
 const styles = StyleSheet.create({
   drawer: {
@@ -40,38 +36,24 @@ export const MainStack = StackNavigator(
     initialRouteName: Screen.Home,
     headerMode: 'none',
   },
-<<<<<<< HEAD
 )
-
-export const RootDrawer = DrawerNavigator(
-=======
-  {
-    initialRouteName: 'Main',
-    headerMode: 'none',
-  },
-);
 
 export const SettingsStack = StackNavigator(
   {
-    Settings: SettingsScreen,
-    AddItem: AddItemScreen,
+    [Screen.Settings]: SettingsScreen,
+    [Screen.AddItem]: AddItemScreen,
   },
   {
+    initialRouteName: Screen.Settings,
     headerMode: 'none',
   },
-);
+)
 
 export const RootDrawer = DrawerNavigator(
   {
-    Home: MainStack,
-    Log: LogScreen,
-    Settings: SettingsStack,
-  },
->>>>>>> wip adding items
-  {
     [Screen.Home]: MainStack,
     [Screen.Log]: LogScreen,
-    [Screen.Settings]: SettingsScreen,
+    [Screen.Settings]: SettingsStack,
   },
   {
     initialRouteName: Screen.Home,

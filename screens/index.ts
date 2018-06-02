@@ -2,5 +2,6 @@ import ListScreen from './list'
 import LogScreen from './log'
 import MainScreen from './main'
 import SettingsScreen from './settings'
+import AddItemScreen from './add-item'
 
-export { ListScreen, LogScreen, MainScreen, SettingsScreen }
+export { AddItemScreen, ListScreen, LogScreen, MainScreen, SettingsScreen }

@@ -1,52 +1,30 @@
-import React from 'react';
-import {Component} from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
-import {Button, FormLabel, FormInput} from 'react-native-elements';
+import React from 'react'
+import { Component } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { NavigationScreenProps } from 'react-navigation'
 
-import {Color} from '../colors';
-import {Item, realm} from '../model/realm';
+import { Color } from '../colors'
+import { Item } from '../model/realm'
+import AddItemForm from '../components/settings/add-form'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.White,
   },
-});
+})
 
-interface State {
-  value: string;
-}
-
-export default class AddItemScreen extends Component<
-  NavigationScreenProps,
-  State
-> {
-  state = {
-    value: '',
-  };
-
-  onChangeText = (value: string) => this.setState(state => ({...state, value}));
-
-  onClick = () => {
-    Item.create(this.state.value);
-    this.props.navigation.pop();
+export default class AddItemScreen extends Component<NavigationScreenProps> {
+  onSave = (itemText: string) => {
+    Item.create(itemText)
+    this.props.navigation.pop()
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <FormLabel>What do you want to track?</FormLabel>
-        <FormInput onChangeText={this.onChangeText} />
-        <Button
-          large
-          title="Save"
-          backgroundColor={Color.Blue}
-          disabled={this.state.value.trim().length === 0}
-          iconRight={{name: 'check'}}
-          onPress={this.onClick}
-        />
+        <AddItemForm onSave={this.onSave} />
       </View>
-    );
+    )
   }
 }
