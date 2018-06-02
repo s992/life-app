@@ -1,12 +1,13 @@
 import React from 'react'
 import { Component } from 'react'
-import { StyleSheet, View, SectionList, ListRenderItemInfo } from 'react-native'
+import { StyleSheet, View, SectionList, ListRenderItemInfo, SectionListData } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
-import { ListItem, Text } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { format } from 'date-fns'
 
 import { Color } from '../colors'
 import { TrackedItem, TrackedItemModel } from '../model/realm'
+import { LogHeader } from '../components/log/log-header'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,61 +18,37 @@ const styles = StyleSheet.create({
   flatList: {
     width: '100%',
   },
-  header: {
-    backgroundColor: Color.Yellow,
-    flex: 1,
-    borderBottomColor: Color.Black,
-    borderBottomWidth: 1,
-    padding: 12,
-  },
-  headerText: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
 })
 
 interface TrackedItemsByDate {
   [key: string]: TrackedItemModel[]
 }
 
+const keyExtractor = (item: TrackedItemModel) => item.id
+const renderHeader = ({ section: { title } }: { section: SectionListData<TrackedItemModel> }) => (
+  <LogHeader title={title} />
+)
+const renderItem = ({ item }: ListRenderItemInfo<TrackedItemModel>) => (
+  <ListItem title={item.item.name} subtitle={format(item.timestamp, 'h:mm:ss a')} hideChevron />
+)
+const groupItemsByDay = (items: ReadonlyArray<TrackedItemModel>) =>
+  items.reduce((accum: TrackedItemsByDate, item) => {
+    const date = format(item.timestamp, 'MM/DD/YY')
+
+    if (!accum[date]) {
+      accum[date] = []
+    }
+
+    accum[date].push(item)
+
+    return accum
+  }, {})
+const createSections = (groupedItems: TrackedItemsByDate) =>
+  Object.keys(groupedItems).map((key) => ({ title: key, data: groupedItems[key] }))
+
 export default class LogScreen extends Component<NavigationScreenProps> {
   render() {
-    const items = TrackedItem.all()
-    const keyExtractor = (item: TrackedItemModel) => item.id
-    const renderHeader = ({ section: { title } }: any) => (
-      <View style={styles.header}>
-        <Text style={styles.headerText} h4>
-          {title}
-        </Text>
-      </View>
-    )
-    const renderItem = ({ item }: ListRenderItemInfo<TrackedItemModel>) => (
-      <ListItem
-        title={item.item.name}
-        subtitle={format(item.timestamp, 'h:mm:ss a')}
-        hideChevron
-      />
-    )
-
-    const byDay: TrackedItemsByDate = items.reduce(
-      (accum: TrackedItemsByDate, item) => {
-        const date = format(item.timestamp, 'MM/DD/YY')
-
-        if (!accum[date]) {
-          accum[date] = []
-        }
-
-        accum[date].push(item)
-
-        return accum
-      },
-      {},
-    )
-
-    const sections = Object.keys(byDay).map((key) => ({
-      title: key,
-      data: byDay[key],
-    }))
+    const sections = createSections(groupItemsByDay(TrackedItem.all()))
 
     return (
       <View style={styles.container}>
