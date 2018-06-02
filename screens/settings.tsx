@@ -32,7 +32,7 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
     realm.write(() => realm.delete(items))
   }
 
-  onAddClicked = () => this.props.navigation.navigate(Screen.AddItem)
+  handleNavigation = (screen: Screen) => () => this.props.navigation.navigate(screen)
 
   render() {
     return (
@@ -40,12 +40,12 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
         <SettingsButton
           title="Add a new item to track"
           icon={{ name: 'plus', type: 'font-awesome' }}
-          onClick={this.onAddClicked}
+          onClick={this.handleNavigation(Screen.AddItem)}
         />
         <SettingsButton
           title="Manage items"
           icon={{ name: 'list', type: 'font-awesome' }}
-          onClick={this.onAddClicked}
+          onClick={this.handleNavigation(Screen.ManageItems)}
         />
         <DeleteButton onClick={this.onDeleteClicked} />
       </View>
