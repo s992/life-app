@@ -6,8 +6,8 @@ import { NavigationScreenProps } from 'react-navigation'
 import { Color } from '../colors'
 import { TrackedItem, realm } from '../model/realm'
 import { Screen } from '../routes'
-import { AddButton } from '../components/settings/add-button'
 import { DeleteButton } from '../components/settings/delete-button'
+import { SettingsButton } from '../components/settings/settings-button'
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +37,16 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
   render() {
     return (
       <View style={styles.container}>
-        <AddButton onClick={this.onAddClicked} />
+        <SettingsButton
+          title="Add a new item to track"
+          icon={{ name: 'plus', type: 'font-awesome' }}
+          onClick={this.onAddClicked}
+        />
+        <SettingsButton
+          title="Manage items"
+          icon={{ name: 'list', type: 'font-awesome' }}
+          onClick={this.onAddClicked}
+        />
         <DeleteButton onClick={this.onDeleteClicked} />
       </View>
     )

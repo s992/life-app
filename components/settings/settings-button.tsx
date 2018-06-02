@@ -4,10 +4,12 @@ import { Button } from 'react-native-elements'
 import { Color } from '../../colors'
 
 export interface Props {
+  title: string
+  icon: {name: string, type?: string}
   onClick: () => void
 }
 
-export const AddButton = (props: Props) => (
+export const SettingsButton = (props: Props) => (
   <Button
     containerViewStyle={{
       width: '100%',
@@ -16,8 +18,8 @@ export const AddButton = (props: Props) => (
     backgroundColor={Color.Black}
     color={Color.White}
     buttonStyle={{ padding: 12, justifyContent: 'space-between' }}
-    iconRight={{ name: 'plus', type: 'font-awesome' }}
-    title="Add a new item to track"
+    iconRight={props.icon}
+    title={props.title}
     onPress={() => props.onClick()}
   />
 )
