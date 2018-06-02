@@ -453,9 +453,9 @@
   version "0.55.16"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.55.16.tgz#992304c2228b276c10d2b4460d824477b25d0306"
 
-"@types/react-navigation@^1.5.11":
-  version "1.5.11"
-  resolved "https://registry.yarnpkg.com/@types/react-navigation/-/react-navigation-1.5.11.tgz#317eb81ff8a4dfbad8f374cadab30e07e0effa31"
+"@types/react-navigation@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-navigation/-/react-navigation-2.0.1.tgz#83b8938d1298c6e86d5db93239bfccafaa8f3979"
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
