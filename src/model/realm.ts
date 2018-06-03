@@ -28,9 +28,7 @@ export class Event {
   }
 
   static create(name: string) {
-    db.write(() => {
-      db.create(Model.Event, { id: uuid(), name })
-    })
+    return { id: uuid(), name }
   }
 
   static all() {
@@ -50,9 +48,7 @@ export class TrackedEvent {
   }
 
   static create(event: EventModel) {
-    db.write(() => {
-      db.create(Model.TrackedEvent, { id: uuid(), timestamp: new Date(), event })
-    })
+    return { id: uuid(), timestamp: new Date(), event }
   }
 
   static all() {

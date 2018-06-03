@@ -4,13 +4,16 @@ import { BackHandler, StyleSheet, ToastAndroid, View } from 'react-native'
 import { Header } from 'react-native-elements'
 import { initializeListeners } from 'react-navigation-redux-helpers'
 import { Provider, connect, Dispatch } from 'react-redux'
-import { DrawerActions, NavigationActions, NavigationDispatch, NavigationState } from 'react-navigation'
+import { NavigationActions, NavigationDispatch, NavigationState } from 'react-navigation'
 
 import { Color } from './colors'
 import { RootDrawer } from './routes'
 
 import { HeaderIcon } from './components/header-icon'
-import { AppState, navigationPropConstructor, ROOT, store } from './store'
+import { AppState, store } from './redux/store'
+import { navigationPropConstructor, ROOT, toggleDrawer } from './redux/nav'
+import { hydrationRequested as eventHydrationRequested } from './redux/event'
+import { hydrationRequested as trackedEventHydrationRequested } from './redux/tracked-event'
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +32,9 @@ class App extends Component<Props> {
   exitTimer?: NodeJS.Timer
 
   componentDidMount() {
+    this.props.dispatch(eventHydrationRequested())
+    this.props.dispatch(trackedEventHydrationRequested())
+
     initializeListeners(ROOT, this.props.nav)
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
   }
@@ -72,7 +78,7 @@ class App extends Component<Props> {
     const navigation = navigationPropConstructor(this.props.dispatch, this.props.nav)
     const isBackable = this.isBackable()
     const leftIcon = isBackable ? 'arrow-back' : 'menu'
-    const leftAction = isBackable ? NavigationActions.back() : DrawerActions.toggleDrawer()
+    const leftAction = isBackable ? NavigationActions.back() : toggleDrawer()
 
     return (
       <View style={styles.container}>

@@ -5,8 +5,11 @@ import { NavigationScreenProps } from 'react-navigation'
 
 import { Color } from '../colors'
 import { List } from '../components/list'
-import { Event, EventModel, TrackedEvent } from '../model/realm'
+import { EventModel, TrackedEvent } from '../model/realm'
 import { Screen } from '../routes'
+import { AppState } from '../redux/store'
+import { connect, DispatchProp } from 'react-redux'
+import { eventTracked } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,19 +20,24 @@ const styles = StyleSheet.create({
   },
 })
 
-export default class ListScreen extends Component<NavigationScreenProps> {
+export interface Props {
+  events: EventModel[]
+}
+
+class ListScreen extends Component<NavigationScreenProps & Props & DispatchProp> {
   onItemSelected = (event: EventModel) => {
-    TrackedEvent.create(event)
+    this.props.dispatch(eventTracked(TrackedEvent.create(event)))
     this.props.navigation.navigate(Screen.Home)
   }
 
   render() {
-    const events = Event.all()
-
     return (
       <View style={styles.container}>
-        <List events={events} onClick={this.onItemSelected} />
+        <List events={this.props.events} onClick={this.onItemSelected} />
       </View>
     )
   }
 }
+
+const mapStateToProps = (state: AppState) => ({ events: state.event.events, nav: state.nav })
+export default connect(mapStateToProps)(ListScreen)
