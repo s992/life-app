@@ -18,8 +18,7 @@ export default class AddItemForm extends Component<Props, State> {
     value: '',
   }
 
-  onChangeText = (value: string) =>
-    this.setState((state) => ({ ...state, value }))
+  onChangeText = (value: string) => this.setState((state) => ({ ...state, value }))
 
   onClick = () => this.props.onSave(this.state.value)
 

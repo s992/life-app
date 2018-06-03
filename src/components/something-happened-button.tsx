@@ -1,5 +1,4 @@
 import React from 'react'
-import { Component } from 'react'
 import { StyleSheet } from 'react-native'
 import { Button } from 'react-native-elements'
 import * as Animatable from 'react-native-animatable'
@@ -22,18 +21,14 @@ const styles = StyleSheet.create({
   },
 })
 
-export class SomethingHappenedButton extends Component<Props> {
-  render() {
-    return (
-      <Animatable.View style={styles.container} animation="fadeIn">
-        <Button
-          buttonStyle={styles.button}
-          color={Color.White}
-          title="Something Happened."
-          large
-          onPress={() => this.props.onClick()}
-        />
-      </Animatable.View>
-    )
-  }
-}
+export const SomethingHappenedButton = (props: Props) => (
+  <Animatable.View style={styles.container} animation="fadeIn">
+    <Button
+      buttonStyle={styles.button}
+      color={Color.White}
+      title="Something Happened."
+      large
+      onPress={() => props.onClick()}
+    />
+  </Animatable.View>
+)

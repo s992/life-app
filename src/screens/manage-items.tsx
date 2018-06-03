@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation'
 import { ListItem } from 'react-native-elements'
 
 import { Color } from '../colors'
-import { Item, ItemModel, realm, TrackedItem } from '../model/realm'
+import { Item, Item, realm, TrackedItem } from '../model/realm'
 
 const styles = StyleSheet.create({
   container: {
@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const keyExtractor = (item: ItemModel) => item.id
+const keyExtractor = (item: Item) => item.id
 
 interface State {
-  items: ReadonlyArray<ItemModel>
+  items: ReadonlyArray<Item>
 }
 
 export default class ManageItemsScreen extends Component<NavigationScreenProps, State> {
@@ -37,7 +37,7 @@ export default class ManageItemsScreen extends Component<NavigationScreenProps, 
     this.setState((state) => ({ ...state, items: Item.all() }))
   }
 
-  renderItem = ({ item }: ListRenderItemInfo<ItemModel>) => (
+  renderItem = ({ item }: ListRenderItemInfo<Item>) => (
     <ListItem
       title={item.name}
       hideChevron
@@ -46,7 +46,7 @@ export default class ManageItemsScreen extends Component<NavigationScreenProps, 
     />
   )
 
-  onItemLongPressed = (item: ItemModel) => {
+  onItemLongPressed = (item: Item) => {
     Alert.alert(
       'Are you sure?',
       'Once you delete this item, all log entries associated with this item will be deleted as well.',
@@ -54,7 +54,7 @@ export default class ManageItemsScreen extends Component<NavigationScreenProps, 
     )
   }
 
-  onDeleteConfirmed = (item: ItemModel) => {
+  onDeleteConfirmed = (item: Item) => {
     // make sure we dont have orphaned tracked items
     const trackedItems = TrackedItem.all().filtered(`item.id = "${item.id}"`)
 

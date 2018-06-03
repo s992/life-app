@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation'
 
 import { Color } from '../colors'
 import { List } from '../components/list'
-import { Item, ItemModel, TrackedItem } from '../model/realm'
+import { Item, Item, TrackedItem } from '../model/realm'
 import { Screen } from '../routes'
 
 const styles = StyleSheet.create({
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 })
 
 export default class ListScreen extends Component<NavigationScreenProps> {
-  onItemSelected = (item: ItemModel) => {
+  onItemSelected = (item: Item) => {
     TrackedItem.create(item)
     this.props.navigation.navigate(Screen.Home)
   }

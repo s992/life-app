@@ -6,7 +6,7 @@ import { ListItem } from 'react-native-elements'
 import { format } from 'date-fns'
 
 import { Color } from '../colors'
-import { realm, TrackedItem, TrackedItemModel } from '../model/realm'
+import { realm, TrackedItem, TrackedItem } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
 
 const styles = StyleSheet.create({
@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
 })
 
 interface TrackedItemsByDate {
-  [key: string]: TrackedItemModel[]
+  [key: string]: TrackedItem[]
 }
 
-const keyExtractor = (item: TrackedItemModel) => item.id
-const renderHeader = ({ section: { title } }: { section: SectionListData<TrackedItemModel> }) => (
+const keyExtractor = (item: TrackedItem) => item.id
+const renderHeader = ({ section: { title } }: { section: SectionListData<TrackedItem> }) => (
   <LogHeader title={title} />
 )
-const groupItemsByDay = (items: ReadonlyArray<TrackedItemModel>) =>
+const groupItemsByDay = (items: ReadonlyArray<TrackedItem>) =>
   items.reduce((accum: TrackedItemsByDate, item) => {
     const date = format(item.timestamp, 'MM/DD/YY')
 
@@ -44,7 +44,7 @@ const createSections = (groupedItems: TrackedItemsByDate) =>
   Object.keys(groupedItems).map((key) => ({ title: key, data: groupedItems[key] }))
 
 interface State {
-  items: ReadonlyArray<TrackedItemModel>
+  items: ReadonlyArray<TrackedItem>
 }
 
 export default class LogScreen extends Component<NavigationScreenProps, State> {
@@ -60,7 +60,7 @@ export default class LogScreen extends Component<NavigationScreenProps, State> {
     this.setState((state) => ({ ...state, items: TrackedItem.all() }))
   }
 
-  renderItem = ({ item }: ListRenderItemInfo<TrackedItemModel>) => (
+  renderItem = ({ item }: ListRenderItemInfo<TrackedItem>) => (
     <ListItem
       title={item.item.name}
       subtitle={format(item.timestamp, 'h:mm:ss a')}
@@ -70,14 +70,14 @@ export default class LogScreen extends Component<NavigationScreenProps, State> {
     />
   )
 
-  onItemLongPressed = (item: TrackedItemModel) => {
+  onItemLongPressed = (item: TrackedItem) => {
     Alert.alert('Are you sure?', 'Once you delete this item, it cannot be recovered.', [
       { text: 'Cancel' },
       { text: 'Delete', onPress: () => this.onDeleteConfirmed(item) },
     ])
   }
 
-  onDeleteConfirmed = (item: TrackedItemModel) => {
+  onDeleteConfirmed = (item: TrackedItem) => {
     realm.write(() => realm.delete(item))
     this.loadItems()
   }

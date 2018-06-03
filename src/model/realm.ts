@@ -6,18 +6,10 @@ export enum Model {
   TrackedItem = 'TrackedItem',
 }
 
-export interface ItemModel {
-  id: string
-  name: string
-}
-
-export interface TrackedItemModel {
-  id: string
-  timestamp: Date
-  item: ItemModel
-}
-
 export class Item {
+  id?: string
+  name?: string
+
   static schema = {
     name: Model.Item,
     primaryKey: 'id',
@@ -34,11 +26,15 @@ export class Item {
   }
 
   static all() {
-    return db.objects<ItemModel>(Model.Item)
+    return db.objects<Item>(Model.Item)
   }
 }
 
 export class TrackedItem {
+  id?: string
+  name?: string
+  item?: Item
+
   static schema = {
     name: Model.TrackedItem,
     primaryKey: 'id',
@@ -49,16 +45,14 @@ export class TrackedItem {
     },
   }
 
-  static create(item: ItemModel) {
+  static create(item: Item) {
     db.write(() => {
       db.create(Model.TrackedItem, { id: uuid(), timestamp: new Date(), item })
     })
   }
 
   static all() {
-    return db
-      .objects<TrackedItemModel>(Model.TrackedItem)
-      .sorted('timestamp', true)
+    return db.objects<TrackedItem>(Model.TrackedItem).sorted('timestamp', true)
   }
 }
 

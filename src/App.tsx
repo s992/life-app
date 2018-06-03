@@ -9,7 +9,7 @@ import { DrawerActions, NavigationActions, NavigationDispatch, NavigationState }
 import { Color } from './colors'
 import { RootDrawer } from './routes'
 
-import HeaderIcon from './components/header-icon'
+import { HeaderIcon } from './components/header-icon'
 import { AppState, navigationPropConstructor, ROOT, store } from './store'
 
 const styles = StyleSheet.create({

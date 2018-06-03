@@ -5,7 +5,7 @@ import { Color } from '../../colors'
 
 export interface Props {
   title: string
-  icon: {name: string, type?: string}
+  icon: { name: string; type?: string }
   onClick: () => void
 }
 
