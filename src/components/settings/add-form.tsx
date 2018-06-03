@@ -6,14 +6,14 @@ import { Button, FormLabel, FormInput } from 'react-native-elements'
 import { Color } from '../../colors'
 
 interface Props {
-  onSave: (itemText: string) => void
+  onSave: (eventText: string) => void
 }
 
 interface State {
   value: string
 }
 
-export default class AddItemForm extends Component<Props, State> {
+export class AddEventForm extends Component<Props, State> {
   state = {
     value: '',
   }

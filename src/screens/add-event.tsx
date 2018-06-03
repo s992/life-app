@@ -4,8 +4,8 @@ import { StyleSheet, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 
 import { Color } from '../colors'
-import { Item } from '../model/realm'
-import AddItemForm from '../components/settings/add-form'
+import { Event } from '../model/realm'
+import { AddEventForm } from '../components/settings/add-form'
 
 const styles = StyleSheet.create({
   container: {
@@ -14,16 +14,16 @@ const styles = StyleSheet.create({
   },
 })
 
-export default class AddItemScreen extends Component<NavigationScreenProps> {
-  onSave = (itemText: string) => {
-    Item.create(itemText)
+export default class AddEVentScreen extends Component<NavigationScreenProps> {
+  onSave = (eventText: string) => {
+    Event.create(eventText)
     this.props.navigation.pop()
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <AddItemForm onSave={this.onSave} />
+        <AddEventForm onSave={this.onSave} />
       </View>
     )
   }

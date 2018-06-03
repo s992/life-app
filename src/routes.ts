@@ -2,15 +2,15 @@ import { StyleSheet } from 'react-native'
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import { Color } from './colors'
-import { AddItemScreen, ListScreen, LogScreen, MainScreen, ManageItemsScreen, SettingsScreen } from './screens'
+import { AddEventScreen, ListScreen, LogScreen, MainScreen, ManageEventsScreen, SettingsScreen } from './screens'
 
 export enum Screen {
   List = 'List',
   Home = 'Home',
   Log = 'Log',
   Settings = 'Settings',
-  AddItem = 'AddItem',
-  ManageItems = 'ManageItems',
+  AddEvent = 'AddEvent',
+  ManageEvents = 'ManageEvents',
 }
 
 const styles = StyleSheet.create({
@@ -36,8 +36,8 @@ export const MainStack = StackNavigator(
 export const SettingsStack = StackNavigator(
   {
     [Screen.Settings]: SettingsScreen,
-    [Screen.AddItem]: AddItemScreen,
-    [Screen.ManageItems]: ManageItemsScreen,
+    [Screen.AddEvent]: AddEventScreen,
+    [Screen.ManageEvents]: ManageEventsScreen,
   },
   {
     initialRouteName: Screen.Settings,

@@ -3,11 +3,11 @@ import { Component } from 'react'
 import { StyleSheet, FlatList, ListRenderItemInfo, View } from 'react-native'
 import { ListItem } from 'react-native-elements'
 
-import { Item } from '../model/realm'
+import { EventModel } from '../model/realm'
 
 export interface Props {
-  items: ReadonlyArray<Item>
-  onClick: (item: Item) => void
+  events: ReadonlyArray<EventModel>
+  onClick: (event: EventModel) => void
 }
 
 const styles = StyleSheet.create({
@@ -23,9 +23,9 @@ const styles = StyleSheet.create({
 })
 
 export class List extends Component<Props> {
-  keyExtractor = (item: Item) => item.id
+  keyExtractor = (event: EventModel) => event.id
 
-  renderItem = ({ item }: ListRenderItemInfo<Item>) => (
+  renderItem = ({ item }: ListRenderItemInfo<EventModel>) => (
     <ListItem title={item.name} onPress={() => this.props.onClick(item)} hideChevron />
   )
 
@@ -35,7 +35,7 @@ export class List extends Component<Props> {
         <FlatList
           style={styles.flatList}
           keyExtractor={this.keyExtractor}
-          data={this.props.items}
+          data={this.props.events}
           renderItem={this.renderItem}
         />
       </View>

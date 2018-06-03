@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation'
 
 import { Color } from '../colors'
 import { List } from '../components/list'
-import { Item, Item, TrackedItem } from '../model/realm'
+import { Event, EventModel, TrackedEvent } from '../model/realm'
 import { Screen } from '../routes'
 
 const styles = StyleSheet.create({
@@ -18,17 +18,17 @@ const styles = StyleSheet.create({
 })
 
 export default class ListScreen extends Component<NavigationScreenProps> {
-  onItemSelected = (item: Item) => {
-    TrackedItem.create(item)
+  onItemSelected = (event: EventModel) => {
+    TrackedEvent.create(event)
     this.props.navigation.navigate(Screen.Home)
   }
 
   render() {
-    const items = Item.all()
+    const events = Event.all()
 
     return (
       <View style={styles.container}>
-        <List items={items} onClick={this.onItemSelected} />
+        <List events={events} onClick={this.onItemSelected} />
       </View>
     )
   }

@@ -4,7 +4,7 @@ import { StyleSheet, View, Alert } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 
 import { Color } from '../colors'
-import { TrackedItem, realm } from '../model/realm'
+import { TrackedEvent, realm } from '../model/realm'
 import { Screen } from '../routes'
 import { DeleteButton } from '../components/settings/delete-button'
 import { SettingsButton } from '../components/settings/settings-button'
@@ -22,14 +22,14 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
   onDeleteClicked = () => {
     Alert.alert(
       'Are you sure?',
-      'Once you delete your tracked items, they cannot be recovered.',
+      'Once you delete your tracked events, they cannot be recovered.',
       [{ text: 'Cancel' }, { text: 'Delete', onPress: this.onDeleteConfirmed }],
     )
   }
 
   onDeleteConfirmed = () => {
-    const items = TrackedItem.all()
-    realm.write(() => realm.delete(items))
+    const events = TrackedEvent.all()
+    realm.write(() => realm.delete(events))
   }
 
   handleNavigation = (screen: Screen) => () => this.props.navigation.navigate(screen)
@@ -38,14 +38,14 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
     return (
       <View style={styles.container}>
         <SettingsButton
-          title="Add a new item to track"
+          title="Add a new event to track"
           icon={{ name: 'plus', type: 'font-awesome' }}
-          onClick={this.handleNavigation(Screen.AddItem)}
+          onClick={this.handleNavigation(Screen.AddEvent)}
         />
         <SettingsButton
-          title="Manage items"
+          title="Manage events"
           icon={{ name: 'list', type: 'font-awesome' }}
-          onClick={this.handleNavigation(Screen.ManageItems)}
+          onClick={this.handleNavigation(Screen.ManageEvents)}
         />
         <DeleteButton onClick={this.onDeleteClicked} />
       </View>

@@ -6,7 +6,7 @@ import { ListItem } from 'react-native-elements'
 import { format } from 'date-fns'
 
 import { Color } from '../colors'
-import { realm, TrackedItem, TrackedItem } from '../model/realm'
+import { realm, TrackedEvent, TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
 
 const styles = StyleSheet.create({
@@ -20,70 +20,70 @@ const styles = StyleSheet.create({
   },
 })
 
-interface TrackedItemsByDate {
-  [key: string]: TrackedItem[]
+interface TrackedEventsByDate {
+  [key: string]: TrackedEventModel[]
 }
 
-const keyExtractor = (item: TrackedItem) => item.id
-const renderHeader = ({ section: { title } }: { section: SectionListData<TrackedItem> }) => (
+const keyExtractor = (event: TrackedEventModel) => event.id
+const renderHeader = ({ section: { title } }: { section: SectionListData<TrackedEventModel> }) => (
   <LogHeader title={title} />
 )
-const groupItemsByDay = (items: ReadonlyArray<TrackedItem>) =>
-  items.reduce((accum: TrackedItemsByDate, item) => {
-    const date = format(item.timestamp, 'MM/DD/YY')
+const groupEventsByDay = (events: ReadonlyArray<TrackedEventModel>) =>
+  events.reduce((accum: TrackedEventsByDate, event) => {
+    const date = format(event.timestamp, 'MM/DD/YY')
 
     if (!accum[date]) {
       accum[date] = []
     }
 
-    accum[date].push(item)
+    accum[date].push(event)
 
     return accum
   }, {})
-const createSections = (groupedItems: TrackedItemsByDate) =>
+const createSections = (groupedItems: TrackedEventsByDate) =>
   Object.keys(groupedItems).map((key) => ({ title: key, data: groupedItems[key] }))
 
 interface State {
-  items: ReadonlyArray<TrackedItem>
+  events: ReadonlyArray<TrackedEventModel>
 }
 
 export default class LogScreen extends Component<NavigationScreenProps, State> {
   state = {
-    items: [],
+    events: [],
   }
 
   componentWillMount() {
-    this.loadItems()
+    this.loadEvents()
   }
 
-  loadItems() {
-    this.setState((state) => ({ ...state, items: TrackedItem.all() }))
+  loadEvents() {
+    this.setState((state) => ({ ...state, events: TrackedEvent.all() }))
   }
 
-  renderItem = ({ item }: ListRenderItemInfo<TrackedItem>) => (
+  renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => (
     <ListItem
-      title={item.item.name}
+      title={item.event.name}
       subtitle={format(item.timestamp, 'h:mm:ss a')}
       hideChevron
       onPress={() => ToastAndroid.show('Long press an item to delete it.', ToastAndroid.SHORT)}
-      onLongPress={() => this.onItemLongPressed(item)}
+      onLongPress={() => this.onEventLongPressed(item)}
     />
   )
 
-  onItemLongPressed = (item: TrackedItem) => {
-    Alert.alert('Are you sure?', 'Once you delete this item, it cannot be recovered.', [
+  onEventLongPressed = (event: TrackedEventModel) => {
+    Alert.alert('Are you sure?', 'Once you delete this event, it cannot be recovered.', [
       { text: 'Cancel' },
-      { text: 'Delete', onPress: () => this.onDeleteConfirmed(item) },
+      { text: 'Delete', onPress: () => this.onDeleteConfirmed(event) },
     ])
   }
 
-  onDeleteConfirmed = (item: TrackedItem) => {
-    realm.write(() => realm.delete(item))
-    this.loadItems()
+  onDeleteConfirmed = (event: TrackedEventModel) => {
+    realm.write(() => realm.delete(event))
+    this.loadEvents()
   }
 
   render() {
-    const sections = createSections(groupItemsByDay(this.state.items))
+    const sections = createSections(groupEventsByDay(this.state.events))
 
     return (
       <View style={styles.container}>
