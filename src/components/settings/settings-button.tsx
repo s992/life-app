@@ -15,7 +15,7 @@ export const SettingsButton = (props: Props) => (
       width: '100%',
       marginBottom: 8,
     }}
-    backgroundColor={Color.Black}
+    backgroundColor={Color.Blue}
     color={Color.White}
     buttonStyle={{ padding: 12, justifyContent: 'space-between' }}
     iconRight={props.icon}

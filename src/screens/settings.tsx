@@ -14,17 +14,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: Color.White,
-    marginTop: 2,
+    marginTop: 8,
   },
 })
 
 export default class SettingsScreen extends Component<NavigationScreenProps> {
   onDeleteClicked = () => {
-    Alert.alert(
-      'Are you sure?',
-      'Once you delete your tracked events, they cannot be recovered.',
-      [{ text: 'Cancel' }, { text: 'Delete', onPress: this.onDeleteConfirmed }],
-    )
+    Alert.alert('Are you sure?', 'Once you delete your tracked events, they cannot be recovered.', [
+      { text: 'Cancel' },
+      { text: 'Delete', onPress: this.onDeleteConfirmed },
+    ])
   }
 
   onDeleteConfirmed = () => {
@@ -38,12 +37,12 @@ export default class SettingsScreen extends Component<NavigationScreenProps> {
     return (
       <View style={styles.container}>
         <SettingsButton
-          title="Add a new event to track"
+          title="Add a new event type"
           icon={{ name: 'plus', type: 'font-awesome' }}
           onClick={this.handleNavigation(Screen.AddEvent)}
         />
         <SettingsButton
-          title="Manage events"
+          title="Manage event type"
           icon={{ name: 'list', type: 'font-awesome' }}
           onClick={this.handleNavigation(Screen.ManageEvents)}
         />

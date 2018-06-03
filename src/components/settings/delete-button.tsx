@@ -20,7 +20,7 @@ export const DeleteButton = (props: Props) => (
       justifyContent: 'space-between',
     }}
     iconRight={{ name: 'trash', type: 'font-awesome' }}
-    title="Delete all entries"
+    title="Delete all logged events"
     onPress={() => props.onClick()}
   />
 )

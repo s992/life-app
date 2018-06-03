@@ -2,7 +2,7 @@ import React from 'react'
 import { Component } from 'react'
 import { StyleSheet, View, SectionList, ListRenderItemInfo, SectionListData, Alert, ToastAndroid } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
-import { ListItem } from 'react-native-elements'
+import { ListItem, Text } from 'react-native-elements'
 import { format } from 'date-fns'
 
 import { Color } from '../colors'
@@ -14,6 +14,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Color.White,
     width: '100%',
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: Color.White,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flatList: {
     width: '100%',
@@ -82,7 +89,17 @@ export default class LogScreen extends Component<NavigationScreenProps, State> {
     this.loadEvents()
   }
 
+  renderEmptyView = () => (
+    <View style={styles.emptyContainer}>
+      <Text h4>You haven't logged anything yet.</Text>
+    </View>
+  )
+
   render() {
+    if (!this.state.events.length) {
+      return this.renderEmptyView()
+    }
+
     const sections = createSections(groupEventsByDay(this.state.events))
 
     return (
