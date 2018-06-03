@@ -3,14 +3,16 @@ import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import { Color } from './colors'
 import { AddEventScreen, ListScreen, LogScreen, MainScreen, ManageEventsScreen, SettingsScreen } from './screens'
+import ExportScreen from './screens/export'
 
 export enum Screen {
   List = 'List',
   Home = 'Home',
-  Log = 'Log',
+  Log = 'Event Log',
   Settings = 'Settings',
   AddEvent = 'AddEvent',
   ManageEvents = 'ManageEvents',
+  Export = 'Export Events',
 }
 
 const styles = StyleSheet.create({
@@ -49,6 +51,7 @@ export const RootDrawer = DrawerNavigator(
   {
     [Screen.Home]: MainStack,
     [Screen.Log]: LogScreen,
+    [Screen.Export]: ExportScreen,
     [Screen.Settings]: SettingsStack,
   },
   {
