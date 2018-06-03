@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { BackHandler, StyleSheet, ToastAndroid, View } from 'react-native'
 import { Header } from 'react-native-elements'
 import { initializeListeners } from 'react-navigation-redux-helpers'
 import { Provider, connect, Dispatch } from 'react-redux'
@@ -25,26 +25,59 @@ interface Props {
 }
 
 class App extends Component<Props> {
+  exitTimerRunning = false
+  exitTimer?: NodeJS.Timer
+
   componentDidMount() {
     initializeListeners(ROOT, this.props.nav)
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+    this.exitTimerRunning = false
+
+    if (this.exitTimer) {
+      clearTimeout(this.exitTimer)
+    }
+  }
+
+  isBackable() {
+    const routeIndex = this.props.nav.routes[this.props.nav.index].index
+    return !!routeIndex && routeIndex !== 0
+  }
+
+  maybeExit() {
+    if (this.exitTimerRunning) {
+      return false
+    }
+
+    ToastAndroid.show('Press back again to exit.', ToastAndroid.SHORT)
+    this.exitTimerRunning = true
+    this.exitTimer = setTimeout(() => (this.exitTimerRunning = false), 2000)
+
+    return true
+  }
+
+  onBackPress = () => {
+    if (!this.isBackable()) {
+      return this.maybeExit()
+    }
+
+    this.props.dispatch(NavigationActions.back())
+    return true
   }
 
   render() {
     const navigation = navigationPropConstructor(this.props.dispatch, this.props.nav)
-    const routeIndex = this.props.nav.routes[this.props.nav.index].index
-    const isBackable = !!routeIndex && routeIndex !== 0
+    const isBackable = this.isBackable()
     const leftIcon = isBackable ? 'arrow-back' : 'menu'
     const leftAction = isBackable ? NavigationActions.back() : DrawerActions.toggleDrawer()
 
     return (
       <View style={styles.container}>
         <Header
-          leftComponent={
-            <HeaderIcon
-              name={leftIcon}
-              onClick={() => this.props.dispatch(leftAction)}
-            />
-          }
+          leftComponent={<HeaderIcon name={leftIcon} onClick={() => this.props.dispatch(leftAction)} />}
           centerComponent={{
             text: 'LIFE',
             style: { color: Color.White },
