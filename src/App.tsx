@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { BackHandler, StyleSheet, ToastAndroid, View } from 'react-native'
+import { BackHandler, StatusBar, StyleSheet, ToastAndroid, View } from 'react-native'
 import { Header } from 'react-native-elements'
 import { initializeListeners } from 'react-navigation-redux-helpers'
 import { Provider, connect, Dispatch } from 'react-redux'
@@ -92,6 +92,7 @@ class App extends Component<Props> {
 
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor={Color.Black} />
         <Header
           leftComponent={<HeaderIcon name={leftIcon} onClick={() => this.props.dispatch(leftAction)} />}
           centerComponent={{
