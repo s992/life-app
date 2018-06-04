@@ -34,6 +34,10 @@ export class Event {
   static all() {
     return db.objects<EventModel>(Model.Event)
   }
+
+  static getById(id: string) {
+    return Event.all().filtered(`id = "${id}"`)[0]
+  }
 }
 
 export class TrackedEvent {
@@ -54,22 +58,12 @@ export class TrackedEvent {
   static all() {
     return db.objects<TrackedEventModel>(Model.TrackedEvent).sorted('timestamp', true)
   }
+
+  static getByEventId(id: string) {
+    return TrackedEvent.all().filtered(`event.id = "${id}"`)
+  }
 }
 
 const db = new Realm({ schema: [Event, TrackedEvent] })
-
-const events = db.objects(Model.Event)
-
-if (events.length === 0) {
-  const defaultEvents = [
-    { name: 'woke up' },
-    { name: 'went to sleep' },
-    { name: 'ate a meal' },
-    { name: 'ate a snack' },
-    { name: 'exercised' },
-  ]
-
-  defaultEvents.forEach(({ name }) => Event.create(name))
-}
 
 export const realm = db

@@ -1,8 +1,9 @@
 import { ActionsObservable, ofType } from 'redux-observable'
 import { map, mapTo, tap } from 'rxjs/operators'
 
-import { Event, EventModel, Model, realm } from '../model/realm'
+import { Event, EventModel, Model, realm, TrackedEvent } from '../model/realm'
 import { Action, createAction, noopAction } from './redux-utils'
+import { hydrationRequested as trackedEventHydrationRequested } from './tracked-event'
 
 export const hydrationRequested = createAction('event::hydrate-requested')
 export const hydrateEvents = createAction<ReadonlyArray<EventModel>>('event::hydrate')
@@ -18,7 +19,6 @@ const initialState: EventState = { events: [] }
 export function eventReducer(state: EventState = initialState, action: Action<any>) {
   switch (action.type) {
     case hydrateEvents.type:
-      console.log(state, action.payload)
       return { ...state, events: action.payload }
 
     case eventDeleted.type:
@@ -41,15 +41,40 @@ export function eventReducer(state: EventState = initialState, action: Action<an
 }
 
 const eventsLoaded = (actions$: ActionsObservable<Action>) =>
-  actions$.pipe(ofType(hydrationRequested.type), map(() => Event.all()), map(hydrateEvents))
+  actions$.pipe(
+    ofType(hydrationRequested.type),
+    map(() => {
+      const events = Event.all()
+
+      if (events.length === 0) {
+        const defaultEvents = [
+          { name: 'Woke up' },
+          { name: 'Went to sleep' },
+          { name: 'Ate a meal' },
+          { name: 'Ate a snack' },
+          { name: 'Exercised' },
+        ]
+
+        defaultEvents.forEach(({ name }) => {
+          realm.write(() => realm.create(Model.Event, Event.create(name)))
+        })
+      }
+
+      return events
+    }),
+    map(hydrateEvents),
+  )
 
 const deleteEvent = (actions$: ActionsObservable<Action>) =>
   actions$.pipe(
     ofType(eventDeleted.type),
-    tap((action) => {
-      realm.write(() => realm.delete(action.payload))
+    tap((action: any) => {
+      realm.write(() => {
+        realm.delete(TrackedEvent.getByEventId(action.payload.id))
+        realm.delete(action.payload)
+      })
     }),
-    mapTo(noopAction()),
+    mapTo(trackedEventHydrationRequested()),
   )
 
 const createEvent = (actions$: ActionsObservable<Action>) =>

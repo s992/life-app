@@ -2,10 +2,13 @@ import React from 'react'
 import { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
+import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
 import { Event } from '../model/realm'
 import { AddEventForm } from '../components/settings/add-form'
+import { AppState } from '../redux/store'
+import { eventCreated } from '../redux/event'
 
 const styles = StyleSheet.create({
   container: {
@@ -14,9 +17,9 @@ const styles = StyleSheet.create({
   },
 })
 
-export default class AddEVentScreen extends Component<NavigationScreenProps> {
+class AddEventScreen extends Component<NavigationScreenProps & DispatchProp> {
   onSave = (eventText: string) => {
-    Event.create(eventText)
+    this.props.dispatch(eventCreated(Event.create(eventText)))
     this.props.navigation.pop()
   }
 
@@ -28,3 +31,6 @@ export default class AddEVentScreen extends Component<NavigationScreenProps> {
     )
   }
 }
+
+const mapStateToProps = (state: AppState) => ({ nav: state.nav })
+export default connect(mapStateToProps)(AddEventScreen)

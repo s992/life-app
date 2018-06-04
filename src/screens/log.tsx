@@ -8,6 +8,9 @@ import { format } from 'date-fns'
 import { Color } from '../colors'
 import { realm, TrackedEvent, TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
+import { AppState } from '../redux/store'
+import { connect, DispatchProp } from 'react-redux'
+import { trackedEventDeleted } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({
   container: {
@@ -50,23 +53,11 @@ const groupEventsByDay = (events: ReadonlyArray<TrackedEventModel>) =>
 const createSections = (groupedItems: TrackedEventsByDate) =>
   Object.keys(groupedItems).map((key) => ({ title: key, data: groupedItems[key] }))
 
-interface State {
+interface Props {
   events: ReadonlyArray<TrackedEventModel>
 }
 
-export default class LogScreen extends Component<NavigationScreenProps, State> {
-  state = {
-    events: [],
-  }
-
-  componentWillMount() {
-    this.loadEvents()
-  }
-
-  loadEvents() {
-    this.setState((state) => ({ ...state, events: TrackedEvent.all() }))
-  }
-
+class LogScreen extends Component<NavigationScreenProps & Props & DispatchProp> {
   renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => (
     <ListItem
       title={item.event.name}
@@ -85,8 +76,7 @@ export default class LogScreen extends Component<NavigationScreenProps, State> {
   }
 
   onDeleteConfirmed = (event: TrackedEventModel) => {
-    realm.write(() => realm.delete(event))
-    this.loadEvents()
+    this.props.dispatch(trackedEventDeleted(event))
   }
 
   renderEmptyView = () => (
@@ -96,11 +86,11 @@ export default class LogScreen extends Component<NavigationScreenProps, State> {
   )
 
   render() {
-    if (!this.state.events.length) {
+    if (!this.props.events.length) {
       return this.renderEmptyView()
     }
 
-    const sections = createSections(groupEventsByDay(this.state.events))
+    const sections = createSections(groupEventsByDay(this.props.events))
 
     return (
       <View style={styles.container}>
@@ -115,3 +105,6 @@ export default class LogScreen extends Component<NavigationScreenProps, State> {
     )
   }
 }
+
+const mapStateToProps = (state: AppState) => ({ nav: state.nav, events: state.trackedEvent.trackedEvents })
+export default connect(mapStateToProps)(LogScreen)

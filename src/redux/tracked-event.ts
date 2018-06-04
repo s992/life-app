@@ -1,8 +1,8 @@
-import { Model, realm, TrackedEvent, TrackedEventModel } from '../model/realm'
 import { ActionsObservable, ofType } from 'redux-observable'
 import { map, mapTo, tap } from 'rxjs/operators'
 
 import { Action, createAction, noopAction } from './redux-utils'
+import { Event, Model, realm, TrackedEvent, TrackedEventModel } from '../model/realm'
 
 export const hydrationRequested = createAction('trackedEvent::hydration-requested')
 export const hydrateTrackedEvents = createAction<ReadonlyArray<TrackedEventModel>>('trackedEvent::hydrate')
@@ -18,7 +18,7 @@ const initialState: TrackedEventState = { trackedEvents: [] }
 export function trackedEventReducer(state: TrackedEventState = initialState, action: Action<any>) {
   switch (action.type) {
     case hydrateTrackedEvents.type:
-      return { ...state, events: action.payload }
+      return { ...state, trackedEvents: action.payload }
 
     case trackedEventDeleted.type:
       const idx = state.trackedEvents.findIndex(
@@ -32,10 +32,10 @@ export function trackedEventReducer(state: TrackedEventState = initialState, act
       const nextEvents = [...state.trackedEvents]
       nextEvents.splice(idx, 1)
 
-      return { ...state, events: nextEvents }
+      return { ...state, trackedEvents: nextEvents }
 
     case eventTracked.type:
-      return { ...state, events: [...state.trackedEvents, action.payload] }
+      return { ...state, trackedEvents: [...state.trackedEvents, action.payload] }
   }
 
   return state
@@ -56,8 +56,9 @@ const deleteTrackedEvent = (actions$: ActionsObservable<Action>) =>
 const createTrackedEvent = (actions$: ActionsObservable<Action>) =>
   actions$.pipe(
     ofType(eventTracked.type),
-    tap((action) => {
-      console.log(action.payload)
+    // TODO: figure out how to type this nonsense
+    tap((action: any) => {
+      action.payload.event = Event.getById(action.payload.event.id)
       realm.write(() => realm.create(Model.TrackedEvent, action.payload))
     }),
     mapTo(noopAction()),

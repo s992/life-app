@@ -5,7 +5,10 @@ import { NavigationScreenProps } from 'react-navigation'
 import { ListItem } from 'react-native-elements'
 
 import { Color } from '../colors'
-import { Event, EventModel, realm, TrackedEvent } from '../model/realm'
+import { EventModel } from '../model/realm'
+import { connect, DispatchProp } from 'react-redux'
+import { AppState } from '../redux/store'
+import { eventDeleted } from '../redux/event'
 
 const styles = StyleSheet.create({
   container: {
@@ -20,23 +23,11 @@ const styles = StyleSheet.create({
 
 const keyExtractor = (event: EventModel) => event.id
 
-interface State {
+interface Props {
   events: ReadonlyArray<EventModel>
 }
 
-export default class ManageEventsScreen extends Component<NavigationScreenProps, State> {
-  state = {
-    events: [],
-  }
-
-  componentWillMount() {
-    this.loadEvents()
-  }
-
-  loadEvents() {
-    this.setState((state) => ({ ...state, events: Event.all() }))
-  }
-
+class ManageEventsScreen extends Component<NavigationScreenProps & Props & DispatchProp> {
   renderItem = ({ item }: ListRenderItemInfo<EventModel>) => (
     <ListItem
       title={item.name}
@@ -55,15 +46,7 @@ export default class ManageEventsScreen extends Component<NavigationScreenProps,
   }
 
   onDeleteConfirmed = (event: EventModel) => {
-    // make sure we dont have orphaned tracked events
-    const trackedEvents = TrackedEvent.all().filtered(`event.id = "${event.id}"`)
-
-    realm.write(() => {
-      realm.delete(trackedEvents)
-      realm.delete(event)
-    })
-
-    this.loadEvents()
+    this.props.dispatch(eventDeleted(event))
   }
 
   render() {
@@ -71,7 +54,7 @@ export default class ManageEventsScreen extends Component<NavigationScreenProps,
       <View style={styles.container}>
         <FlatList
           style={styles.flatList}
-          data={this.state.events}
+          data={this.props.events}
           keyExtractor={keyExtractor}
           renderItem={this.renderItem}
         />
@@ -79,3 +62,6 @@ export default class ManageEventsScreen extends Component<NavigationScreenProps,
     )
   }
 }
+
+const mapStateToProps = (state: AppState) => ({ nav: state.nav, events: state.event.events })
+export default connect(mapStateToProps)(ManageEventsScreen)
