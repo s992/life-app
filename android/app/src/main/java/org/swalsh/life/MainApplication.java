@@ -1,4 +1,4 @@
-package com.life;
+package org.swalsh.life;
 
 import android.app.Application;
 
