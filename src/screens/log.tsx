@@ -9,7 +9,7 @@ import { connect, DispatchProp } from 'react-redux'
 import { Color } from '../colors'
 import { TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
-import { AppState } from '../redux/store'
+import { RootState } from '../redux/store'
 import { trackedEventDeleted } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({
@@ -106,5 +106,5 @@ class LogScreen extends Component<NavigationScreenProps & Props & DispatchProp> 
   }
 }
 
-const mapStateToProps = (state: AppState) => ({ nav: state.nav, events: state.trackedEvent.trackedEvents })
+const mapStateToProps = (state: RootState) => ({ nav: state.nav, events: state.trackedEvent.trackedEvents })
 export default connect(mapStateToProps)(LogScreen)

@@ -6,7 +6,7 @@ import { middleware as navMiddleware, navReducer, NavState } from './nav'
 import { epics as eventEpics, eventReducer, EventState } from './event'
 import { epics as trackedEventEpics, trackedEventReducer, TrackedEventState } from './tracked-event'
 
-export type AppState = {
+export type RootState = {
   readonly event: EventState
   readonly nav: NavState
   readonly trackedEvent: TrackedEventState
@@ -34,7 +34,7 @@ const combineEpics = (...epics: any[]) => {
     )
 }
 
-const rootReducer = combineReducers<AppState>({
+const rootReducer = combineReducers<RootState>({
   event: eventReducer,
   nav: navReducer,
   trackedEvent: trackedEventReducer,

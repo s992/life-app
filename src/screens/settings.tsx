@@ -8,7 +8,7 @@ import { List, ListItem } from 'react-native-elements'
 import { Color } from '../colors'
 import { Screen } from '../routes'
 import { allTrackedEventsDeleted } from '../redux/tracked-event'
-import { AppState } from '../redux/store'
+import { RootState } from '../redux/store'
 
 const styles = StyleSheet.create({
   container: {
@@ -79,5 +79,5 @@ class SettingsScreen extends Component<NavigationScreenProps & DispatchProp> {
   }
 }
 
-const mapStateToProps = (state: AppState) => ({ nav: state.nav })
+const mapStateToProps = (state: RootState) => ({ nav: state.nav })
 export default connect(mapStateToProps)(SettingsScreen)

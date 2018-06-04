@@ -9,7 +9,7 @@ import { NavigationActions, NavigationDispatch, NavigationState } from 'react-na
 import { Color } from './colors'
 import { RootDrawer, Screen } from './routes'
 import { HeaderIcon } from './components/header-icon'
-import { AppState, store } from './redux/store'
+import { RootState, store } from './redux/store'
 import { navigationPropConstructor, ROOT, toggleDrawer } from './redux/nav'
 import { hydrationRequested as eventHydrationRequested } from './redux/event'
 import { hydrationRequested as trackedEventHydrationRequested } from './redux/tracked-event'
@@ -106,7 +106,7 @@ class App extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: AppState) => ({ nav: state.nav })
+const mapStateToProps = (state: RootState) => ({ nav: state.nav })
 const AppWithNavigationState = connect(mapStateToProps)(App)
 
 export default class Root extends Component {

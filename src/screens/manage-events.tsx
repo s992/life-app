@@ -7,7 +7,7 @@ import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
 import { EventModel } from '../model/realm'
-import { AppState } from '../redux/store'
+import { RootState } from '../redux/store'
 import { eventDeleted } from '../redux/event'
 
 const styles = StyleSheet.create({
@@ -63,5 +63,5 @@ class ManageEventsScreen extends Component<NavigationScreenProps & Props & Dispa
   }
 }
 
-const mapStateToProps = (state: AppState) => ({ nav: state.nav, events: state.event.events })
+const mapStateToProps = (state: RootState) => ({ nav: state.nav, events: state.event.events })
 export default connect(mapStateToProps)(ManageEventsScreen)

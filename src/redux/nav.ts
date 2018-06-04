@@ -7,7 +7,7 @@ import {
 import { NavigationState } from 'react-navigation'
 
 import { RootDrawer } from '../routes'
-import { AppState } from './store'
+import { RootState } from './store'
 import { createAction } from './redux-utils'
 
 export type NavState = NavigationState
@@ -17,5 +17,5 @@ export const toggleDrawer = createAction('Navigation/TOGGLE_DRAWER')
 
 export const ROOT = 'root'
 export const navReducer = createNavigationReducer(RootDrawer) as Reducer<NavState, AnyAction>
-export const middleware = createReactNavigationReduxMiddleware<AppState>(ROOT, (state) => state.nav)
+export const middleware = createReactNavigationReduxMiddleware<RootState>(ROOT, (state) => state.nav)
 export const navigationPropConstructor = createNavigationPropConstructor(ROOT)

@@ -8,7 +8,7 @@ import { Color } from '../colors'
 import { List } from '../components/list'
 import { EventModel, TrackedEvent } from '../model/realm'
 import { Screen } from '../routes'
-import { AppState } from '../redux/store'
+import { RootState } from '../redux/store'
 import { eventTracked } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({
@@ -39,5 +39,5 @@ class ListScreen extends Component<NavigationScreenProps & Props & DispatchProp>
   }
 }
 
-const mapStateToProps = (state: AppState) => ({ events: state.event.events, nav: state.nav })
+const mapStateToProps = (state: RootState) => ({ events: state.event.events, nav: state.nav })
 export default connect(mapStateToProps)(ListScreen)
