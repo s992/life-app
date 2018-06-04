@@ -61,7 +61,7 @@ const deleteTrackedEvent = (actions$: ActionsObservable<Action>) =>
 const deleteAllTrackedEvents = (actions$: ActionsObservable<Action>) =>
   actions$.pipe(
     ofType(allTrackedEventsDeleted.type),
-    tap((action: any) => {
+    tap(() => {
       const records = TrackedEvent.all()
       realm.write(() => realm.delete(records))
     }),

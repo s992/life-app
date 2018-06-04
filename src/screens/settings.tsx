@@ -3,12 +3,12 @@ import { Component } from 'react'
 import { StyleSheet, View, Alert } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { connect, DispatchProp } from 'react-redux'
+import { List, ListItem } from 'react-native-elements'
 
 import { Color } from '../colors'
 import { Screen } from '../routes'
 import { allTrackedEventsDeleted } from '../redux/tracked-event'
 import { AppState } from '../redux/store'
-import { List, ListItem } from 'react-native-elements'
 
 const styles = StyleSheet.create({
   container: {

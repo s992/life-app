@@ -19,5 +19,3 @@ export const ROOT = 'root'
 export const navReducer = createNavigationReducer(RootDrawer) as Reducer<NavState, AnyAction>
 export const middleware = createReactNavigationReduxMiddleware<AppState>(ROOT, (state) => state.nav)
 export const navigationPropConstructor = createNavigationPropConstructor(ROOT)
-
-

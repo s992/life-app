@@ -2,12 +2,12 @@ import React from 'react'
 import { Component } from 'react'
 import { Button, StyleSheet, ToastAndroid, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
+import { format } from 'date-fns'
+import { Text } from 'react-native-elements'
 import RNFetchBlob from 'react-native-fetch-blob'
 
 import { Color } from '../colors'
 import { TrackedEvent } from '../model/realm'
-import { format } from 'date-fns'
-import { Text } from 'react-native-elements'
 
 const styles = StyleSheet.create({
   container: {

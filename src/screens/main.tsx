@@ -20,9 +20,7 @@ export default class MainScreen extends Component<NavigationScreenProps> {
   render() {
     return (
       <View style={styles.container}>
-        <SomethingHappenedButton
-          onClick={() => this.props.navigation.navigate(Screen.List)}
-        />
+        <SomethingHappenedButton onClick={() => this.props.navigation.navigate(Screen.List)} />
       </View>
     )
   }

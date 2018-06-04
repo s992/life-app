@@ -2,13 +2,13 @@ import React from 'react'
 import { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
+import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
 import { List } from '../components/list'
 import { EventModel, TrackedEvent } from '../model/realm'
 import { Screen } from '../routes'
 import { AppState } from '../redux/store'
-import { connect, DispatchProp } from 'react-redux'
 import { eventTracked } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({

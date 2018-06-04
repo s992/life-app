@@ -8,7 +8,6 @@ import { NavigationActions, NavigationDispatch, NavigationState } from 'react-na
 
 import { Color } from './colors'
 import { RootDrawer, Screen } from './routes'
-
 import { HeaderIcon } from './components/header-icon'
 import { AppState, store } from './redux/store'
 import { navigationPropConstructor, ROOT, toggleDrawer } from './redux/nav'

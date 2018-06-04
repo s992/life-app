@@ -4,12 +4,12 @@ import { StyleSheet, View, SectionList, ListRenderItemInfo, SectionListData, Ale
 import { NavigationScreenProps } from 'react-navigation'
 import { ListItem, Text } from 'react-native-elements'
 import { format } from 'date-fns'
+import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
-import { realm, TrackedEvent, TrackedEventModel } from '../model/realm'
+import { TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
 import { AppState } from '../redux/store'
-import { connect, DispatchProp } from 'react-redux'
 import { trackedEventDeleted } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({

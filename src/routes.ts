@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native'
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import { Color } from './colors'
-import { AddEventScreen, ListScreen, LogScreen, MainScreen, ManageEventsScreen, SettingsScreen } from './screens'
-import ExportScreen from './screens/export'
+import { AddEventScreen, ExportScreen, ListScreen, LogScreen, MainScreen, ManageEventsScreen, SettingsScreen } from './screens'
 
 export enum Screen {
   List = 'List',

@@ -3,10 +3,10 @@ import { Component } from 'react'
 import { StyleSheet, View, ListRenderItemInfo, Alert, ToastAndroid, FlatList } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { ListItem } from 'react-native-elements'
+import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
 import { EventModel } from '../model/realm'
-import { connect, DispatchProp } from 'react-redux'
 import { AppState } from '../redux/store'
 import { eventDeleted } from '../redux/event'
 
