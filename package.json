@@ -4,6 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:android": "$(yarn bin)/concurrently \"yarn start\" \"yarn run:android\"",
+    "start:ios": "$(yarn bin)/concurrently \"yarn start\" \"yarn run:ios\"",
+    "start:all": "$(yarn bin)/concurrently \"yarn start\" \"yarn run:android\" \"yarn run:ios\"",
+    "run:android": "react-native run-android --no-packager",
+    "run:ios": "react-native run-ios --no-packager",
     "test": "jest",
     "test:types": "$(yarn bin)/tsc --noEmit --skipLibCheck"
   },
@@ -37,6 +42,7 @@
     "@types/uuid": "^3.4.3",
     "babel-jest": "23.0.0",
     "babel-preset-react-native": "4.0.0",
+    "concurrently": "^3.5.1",
     "jest": "23.0.0",
     "prettier": "1.12.1",
     "react-addons-test-utils": "^15.6.2",
