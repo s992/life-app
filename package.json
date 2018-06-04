@@ -8,7 +8,7 @@
     "start:ios": "$(yarn bin)/concurrently \"yarn start\" \"yarn run:ios\"",
     "start:all": "$(yarn bin)/concurrently \"yarn start\" \"yarn run:android\" \"yarn run:ios\"",
     "run:android": "react-native run-android --no-packager",
-    "run:ios": "react-native run-ios --no-packager",
+    "run:ios": "react-native run-ios --no-packager --simulator=\"iPhone 7\"",
     "test": "jest",
     "test:types": "$(yarn bin)/tsc --noEmit --skipLibCheck"
   },

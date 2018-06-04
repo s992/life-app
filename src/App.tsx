@@ -91,7 +91,7 @@ class App extends Component<Props> {
 
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor={Color.Black} />
+        <StatusBar backgroundColor={Color.Black} barStyle='light-content' />
         <Header
           leftComponent={<HeaderIcon name={leftIcon} onClick={() => this.props.dispatch(leftAction)} />}
           centerComponent={{
