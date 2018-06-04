@@ -6,17 +6,29 @@ import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
 import { Screen } from '../routes'
-import { DeleteButton } from '../components/settings/delete-button'
-import { SettingsButton } from '../components/settings/settings-button'
 import { allTrackedEventsDeleted } from '../redux/tracked-event'
 import { AppState } from '../redux/store'
+import { List, ListItem } from 'react-native-elements'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     backgroundColor: Color.White,
-    marginTop: 8,
+    width: '100%',
+  },
+  listContainer: {
+    marginTop: 0,
+    width: '100%',
+  },
+  listItemContainer: {
+    backgroundColor: Color.White,
+  },
+  deleteContainer: {
+    backgroundColor: Color.Red,
+  },
+  deleteTitle: {
+    color: Color.White,
   },
 })
 
@@ -37,17 +49,31 @@ class SettingsScreen extends Component<NavigationScreenProps & DispatchProp> {
   render() {
     return (
       <View style={styles.container}>
-        <SettingsButton
-          title="Add a new event type"
-          icon={{ name: 'plus', type: 'font-awesome' }}
-          onClick={this.handleNavigation(Screen.AddEvent)}
-        />
-        <SettingsButton
-          title="Manage event types"
-          icon={{ name: 'list', type: 'font-awesome' }}
-          onClick={this.handleNavigation(Screen.ManageEvents)}
-        />
-        <DeleteButton onClick={this.onDeleteClicked} />
+        <List containerStyle={styles.listContainer}>
+          <ListItem
+            containerStyle={styles.listItemContainer}
+            title="Add a new event type"
+            leftIcon={{ name: 'create' }}
+            onPress={this.handleNavigation(Screen.AddEvent)}
+          />
+          <ListItem
+            containerStyle={styles.listItemContainer}
+            title="Manage event types"
+            leftIcon={{ name: 'list' }}
+            onPress={this.handleNavigation(Screen.ManageEvents)}
+          />
+        </List>
+        <List containerStyle={{ width: '100%' }}>
+          <ListItem
+            containerStyle={styles.deleteContainer}
+            titleStyle={styles.deleteTitle}
+            underlayColor={Color.Red}
+            title="Delete all logged events"
+            leftIcon={{ name: 'delete', color: Color.White }}
+            onPress={this.onDeleteClicked}
+            hideChevron
+          />
+        </List>
       </View>
     )
   }
