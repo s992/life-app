@@ -59,6 +59,10 @@ export class TrackedEvent {
     return db.objects<TrackedEventModel>(Model.TrackedEvent).sorted('timestamp', true)
   }
 
+  static getById(id: string) {
+    return TrackedEvent.all().filtered(`id = "${id}"`)[0]
+  }
+
   static getByEventId(id: string) {
     return TrackedEvent.all().filtered(`event.id = "${id}"`)
   }

@@ -7,6 +7,7 @@ import { Event, Model, realm, TrackedEvent, TrackedEventModel } from '../model/r
 export const hydrationRequested = createAction('trackedEvent::hydration-requested')
 export const hydrateTrackedEvents = createAction<ReadonlyArray<TrackedEventModel>>('trackedEvent::hydrate')
 export const trackedEventDeleted = createAction<TrackedEventModel>('trackedEvent::delete')
+export const allTrackedEventsDeleted = createAction('trackedEvent::delete-all')
 export const eventTracked = createAction<TrackedEventModel>('trackedEvent::tracked')
 
 export interface TrackedEventState {
@@ -36,6 +37,9 @@ export function trackedEventReducer(state: TrackedEventState = initialState, act
 
     case eventTracked.type:
       return { ...state, trackedEvents: [...state.trackedEvents, action.payload] }
+
+    case allTrackedEventsDeleted.type:
+      return { ...state, trackedEvents: [] }
   }
 
   return state
@@ -47,8 +51,19 @@ const trackedEventsLoaded = (actions$: ActionsObservable<Action>) =>
 const deleteTrackedEvent = (actions$: ActionsObservable<Action>) =>
   actions$.pipe(
     ofType(trackedEventDeleted.type),
-    tap((action) => {
-      realm.write(() => realm.delete(action.payload))
+    tap((action: any) => {
+      const record = TrackedEvent.getById(action.payload.id)
+      realm.write(() => realm.delete(record))
+    }),
+    mapTo(noopAction()),
+  )
+
+const deleteAllTrackedEvents = (actions$: ActionsObservable<Action>) =>
+  actions$.pipe(
+    ofType(allTrackedEventsDeleted.type),
+    tap((action: any) => {
+      const records = TrackedEvent.all()
+      realm.write(() => realm.delete(records))
     }),
     mapTo(noopAction()),
   )
@@ -64,4 +79,4 @@ const createTrackedEvent = (actions$: ActionsObservable<Action>) =>
     mapTo(noopAction()),
   )
 
-export const epics = [trackedEventsLoaded, deleteTrackedEvent, createTrackedEvent]
+export const epics = [trackedEventsLoaded, deleteTrackedEvent, createTrackedEvent, deleteAllTrackedEvents]
