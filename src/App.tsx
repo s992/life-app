@@ -7,7 +7,7 @@ import { Provider, connect, Dispatch } from 'react-redux'
 import { NavigationActions, NavigationDispatch, NavigationState } from 'react-navigation'
 
 import { Color } from './colors'
-import { RootDrawer } from './routes'
+import { RootDrawer, Screen } from './routes'
 
 import { HeaderIcon } from './components/header-icon'
 import { AppState, store } from './redux/store'
@@ -53,9 +53,14 @@ class App extends Component<Props> {
     return !!routeIndex && routeIndex !== 0
   }
 
+  isTopPage() {
+    return this.props.nav.index === 0
+  }
+
   maybeExit() {
     if (this.exitTimerRunning) {
-      return false
+      BackHandler.exitApp()
+      return true
     }
 
     ToastAndroid.show('Press back again to exit.', ToastAndroid.SHORT)
@@ -66,12 +71,17 @@ class App extends Component<Props> {
   }
 
   onBackPress = () => {
-    if (!this.isBackable()) {
-      return this.maybeExit()
+    if (this.isBackable()) {
+      this.props.dispatch(NavigationActions.back())
+      return true
     }
 
-    this.props.dispatch(NavigationActions.back())
-    return true
+    if (!this.isTopPage()) {
+      this.props.dispatch(NavigationActions.navigate({ routeName: Screen.Home }))
+      return true
+    }
+
+    return this.maybeExit()
   }
 
   render() {
