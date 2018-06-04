@@ -8,7 +8,6 @@
     "test:types": "$(yarn bin)/tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@types/react-navigation": "^2.0.1",
     "date-fns": "^1.29.0",
     "react": "16.3.1",
     "react-native": "0.55.4",
@@ -32,6 +31,7 @@
     "@types/react-native": "^0.55.16",
     "@types/react-native-fetch-blob": "^0.10.4",
     "@types/react-native-vector-icons": "^4.6.1",
+    "@types/react-navigation": "^2.0.1",
     "@types/react-redux": "^6.0.1",
     "@types/react-test-renderer": "^16.0.1",
     "@types/uuid": "^3.4.3",
