@@ -2,7 +2,16 @@ import { StyleSheet } from 'react-native'
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 
 import { Color } from './colors'
-import { AddEventScreen, ExportScreen, ListScreen, LogScreen, MainScreen, ManageEventsScreen, SettingsScreen } from './screens'
+import {
+  AddEventScreen,
+  EventDetailScreen,
+  ExportScreen,
+  ListScreen,
+  LogScreen,
+  MainScreen,
+  ManageEventsScreen,
+  SettingsScreen,
+} from './screens'
 
 export enum Screen {
   List = 'List',
@@ -12,6 +21,7 @@ export enum Screen {
   AddEvent = 'AddEvent',
   ManageEvents = 'ManageEvents',
   Export = 'Export Events',
+  EventDetail = 'EventDetail',
 }
 
 const styles = StyleSheet.create({
@@ -34,11 +44,22 @@ export const MainStack = StackNavigator(
   },
 )
 
+export const EventStack = StackNavigator(
+  {
+    [Screen.ManageEvents]: ManageEventsScreen,
+    [Screen.EventDetail]: EventDetailScreen,
+  },
+  {
+    initialRouteName: Screen.ManageEvents,
+    headerMode: 'none',
+  },
+)
+
 export const SettingsStack = StackNavigator(
   {
     [Screen.Settings]: SettingsScreen,
     [Screen.AddEvent]: AddEventScreen,
-    [Screen.ManageEvents]: ManageEventsScreen,
+    [Screen.ManageEvents]: EventStack,
   },
   {
     initialRouteName: Screen.Settings,

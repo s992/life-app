@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { StyleSheet, View, ListRenderItemInfo, Alert, ToastAndroid, FlatList } from 'react-native'
+import { StyleSheet, View, ListRenderItemInfo, Alert } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { ListItem } from 'react-native-elements'
 import { connect, DispatchProp } from 'react-redux'
@@ -8,6 +8,7 @@ import { connect, DispatchProp } from 'react-redux'
 import { Color } from '../colors'
 import { Event, EventModel } from '../model/realm'
 import { RootState } from '../redux/store'
+import { Screen } from '../routes'
 
 const styles = StyleSheet.create({
   container: {
@@ -15,12 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.White,
     width: '100%',
   },
-  flatList: {
-    width: '100%',
-  },
 })
-
-const keyExtractor = (event: EventModel) => event.id
 
 interface State {
   events: ReadonlyArray<EventModel>
@@ -34,11 +30,16 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
   renderItem = ({ item }: ListRenderItemInfo<EventModel>) => (
     <ListItem
       title={item.name}
-      hideChevron
-      onPress={() => ToastAndroid.show('Long press an event to delete it.', ToastAndroid.SHORT)}
+      onPress={() => this.onEventPressed(item)}
       onLongPress={() => this.onEventLongPressed(item)}
     />
   )
+
+  onEventPressed = (event: EventModel) => {
+    this.props.navigation.navigate(Screen.EventDetail, {
+      eventId: event.id,
+    })
+  }
 
   onEventLongPressed = (event: EventModel) => {
     Alert.alert(
@@ -56,12 +57,14 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-          style={styles.flatList}
-          data={this.state.events}
-          keyExtractor={keyExtractor}
-          renderItem={this.renderItem}
-        />
+        {this.state.events.map((event) => (
+          <ListItem
+            key={event.id}
+            title={event.name}
+            onPress={() => this.onEventPressed(event)}
+            onLongPress={() => this.onEventLongPressed(event)}
+          />
+        ))}
       </View>
     )
   }
