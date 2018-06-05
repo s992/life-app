@@ -9,6 +9,7 @@ import { Color } from '../colors'
 import { Screen } from '../routes'
 import { allTrackedEventsDeleted } from '../redux/tracked-event'
 import { RootState } from '../redux/store'
+import { TrackedEvent } from '../model/realm'
 
 const styles = StyleSheet.create({
   container: {
@@ -41,7 +42,7 @@ class SettingsScreen extends Component<NavigationScreenProps & DispatchProp> {
   }
 
   onDeleteConfirmed = () => {
-    this.props.dispatch(allTrackedEventsDeleted())
+    TrackedEvent.deleteAll()
   }
 
   handleNavigation = (screen: Screen) => () => this.props.navigation.navigate(screen)
