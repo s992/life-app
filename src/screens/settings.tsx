@@ -7,7 +7,6 @@ import { List, ListItem } from 'react-native-elements'
 
 import { Color } from '../colors'
 import { Screen } from '../routes'
-import { allTrackedEventsDeleted } from '../redux/tracked-event'
 import { RootState } from '../redux/store'
 import { TrackedEvent } from '../model/realm'
 

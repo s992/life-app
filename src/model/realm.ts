@@ -83,6 +83,24 @@ export class TrackedEvent {
   }
 }
 
+function createDefaultEvents(realm: Realm) {
+  const events = Event.all()
+
+  if (events.length !== 0) {
+    return
+  }
+
+  const defaultEvents = ['Woke up', 'Went to sleep', 'Ate a meal', 'Ate a snack', 'Exercised']
+
+  db.write(() => {
+    defaultEvents.forEach((name) => {
+      realm.create(Model.Event, { id: uuid(), name })
+    })
+  })
+}
+
 const db = new Realm({ schema: [Event, TrackedEvent] })
+
+createDefaultEvents(db)
 
 export const realm = db
