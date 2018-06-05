@@ -65,7 +65,7 @@ const deleteAllTrackedEvents = (actions$: ActionsObservable<Action>) =>
       const records = TrackedEvent.all()
       realm.write(() => realm.delete(records))
     }),
-    mapTo(noopAction()),
+    mapTo(hydrationRequested()),
   )
 
 const createTrackedEvent = (actions$: ActionsObservable<Action>) =>
@@ -76,7 +76,7 @@ const createTrackedEvent = (actions$: ActionsObservable<Action>) =>
       action.payload.event = Event.getById(action.payload.event.id)
       realm.write(() => realm.create(Model.TrackedEvent, action.payload))
     }),
-    mapTo(noopAction()),
+    mapTo(hydrationRequested()),
   )
 
 export const epics = [trackedEventsLoaded, deleteTrackedEvent, createTrackedEvent, deleteAllTrackedEvents]
