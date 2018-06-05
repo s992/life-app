@@ -28,7 +28,14 @@ export class Event {
   }
 
   static create(name: string) {
-    return { id: uuid(), name }
+    db.write(() => db.create(Model.Event, { id: uuid(), name }))
+  }
+
+  static delete(event: EventModel) {
+    db.write(() => {
+      const orphans = TrackedEvent.getByEventId(event.id)
+      db.delete([...orphans, event])
+    })
   }
 
   static all() {
@@ -52,7 +59,15 @@ export class TrackedEvent {
   }
 
   static create(event: EventModel) {
-    return { id: uuid(), timestamp: new Date(), event }
+    db.write(() => db.create(Model.TrackedEvent, { id: uuid(), timestamp: new Date(), event }))
+  }
+
+  static delete(trackedEvent: TrackedEventModel) {
+    db.write(() => db.delete(trackedEvent))
+  }
+
+  static deleteAll() {
+    db.write(() => db.delete(TrackedEvent.all()))
   }
 
   static all() {
@@ -68,6 +83,24 @@ export class TrackedEvent {
   }
 }
 
+function createDefaultEvents(realm: Realm) {
+  const events = Event.all()
+
+  if (events.length !== 0) {
+    return
+  }
+
+  const defaultEvents = ['Woke up', 'Went to sleep', 'Ate a meal', 'Ate a snack', 'Exercised']
+
+  db.write(() => {
+    defaultEvents.forEach((name) => {
+      realm.create(Model.Event, { id: uuid(), name })
+    })
+  })
+}
+
 const db = new Realm({ schema: [Event, TrackedEvent] })
+
+createDefaultEvents(db)
 
 export const realm = db

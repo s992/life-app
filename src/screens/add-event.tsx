@@ -8,7 +8,6 @@ import { Color } from '../colors'
 import { Event } from '../model/realm'
 import { AddEventForm } from '../components/settings/add-form'
 import { RootState } from '../redux/store'
-import { eventCreated } from '../redux/event'
 
 const styles = StyleSheet.create({
   container: {
@@ -19,7 +18,7 @@ const styles = StyleSheet.create({
 
 class AddEventScreen extends Component<NavigationScreenProps & DispatchProp> {
   onSave = (eventText: string) => {
-    this.props.dispatch(eventCreated(Event.create(eventText)))
+    Event.create(eventText)
     this.props.navigation.pop()
   }
 

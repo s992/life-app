@@ -6,9 +6,8 @@ import { ListItem } from 'react-native-elements'
 import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
-import { EventModel } from '../model/realm'
+import { Event, EventModel } from '../model/realm'
 import { RootState } from '../redux/store'
-import { eventDeleted } from '../redux/event'
 
 const styles = StyleSheet.create({
   container: {
@@ -23,11 +22,15 @@ const styles = StyleSheet.create({
 
 const keyExtractor = (event: EventModel) => event.id
 
-interface Props {
+interface State {
   events: ReadonlyArray<EventModel>
 }
 
-class ManageEventsScreen extends Component<NavigationScreenProps & Props & DispatchProp> {
+class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp, State> {
+  state = {
+    events: Event.all(),
+  }
+
   renderItem = ({ item }: ListRenderItemInfo<EventModel>) => (
     <ListItem
       title={item.name}
@@ -46,7 +49,8 @@ class ManageEventsScreen extends Component<NavigationScreenProps & Props & Dispa
   }
 
   onDeleteConfirmed = (event: EventModel) => {
-    this.props.dispatch(eventDeleted(event))
+    Event.delete(event)
+    this.setState((state) => ({ ...state, events: Event.all() }))
   }
 
   render() {
@@ -54,7 +58,7 @@ class ManageEventsScreen extends Component<NavigationScreenProps & Props & Dispa
       <View style={styles.container}>
         <FlatList
           style={styles.flatList}
-          data={this.props.events}
+          data={this.state.events}
           keyExtractor={keyExtractor}
           renderItem={this.renderItem}
         />
@@ -63,5 +67,5 @@ class ManageEventsScreen extends Component<NavigationScreenProps & Props & Dispa
   }
 }
 
-const mapStateToProps = (state: RootState) => ({ nav: state.nav, events: state.event.events })
+const mapStateToProps = (state: RootState) => ({ nav: state.nav })
 export default connect(mapStateToProps)(ManageEventsScreen)

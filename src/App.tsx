@@ -11,8 +11,6 @@ import { RootDrawer, Screen } from './routes'
 import { HeaderIcon } from './components/header-icon'
 import { RootState, store } from './redux/store'
 import { navigationPropConstructor, ROOT, toggleDrawer } from './redux/nav'
-import { hydrationRequested as eventHydrationRequested } from './redux/event'
-import { hydrationRequested as trackedEventHydrationRequested } from './redux/tracked-event'
 
 const styles = StyleSheet.create({
   container: {
@@ -31,9 +29,6 @@ class App extends Component<Props> {
   exitTimer?: NodeJS.Timer
 
   componentDidMount() {
-    this.props.dispatch(eventHydrationRequested())
-    this.props.dispatch(trackedEventHydrationRequested())
-
     initializeListeners(ROOT, this.props.nav)
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
   }

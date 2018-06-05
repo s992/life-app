@@ -7,10 +7,9 @@ import { format } from 'date-fns'
 import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
-import { TrackedEventModel } from '../model/realm'
+import { TrackedEvent, TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
 import { RootState } from '../redux/store'
-import { trackedEventDeleted } from '../redux/tracked-event'
 
 const styles = StyleSheet.create({
   container: {
@@ -53,17 +52,21 @@ const groupEventsByDay = (events: ReadonlyArray<TrackedEventModel>) =>
 const createSections = (groupedItems: TrackedEventsByDate) =>
   Object.keys(groupedItems).map((key) => ({ title: key, data: groupedItems[key] }))
 
-interface Props {
+interface State {
   events: ReadonlyArray<TrackedEventModel>
 }
 
-class LogScreen extends Component<NavigationScreenProps & Props & DispatchProp> {
+class LogScreen extends Component<NavigationScreenProps & DispatchProp, State> {
+  state = {
+    events: TrackedEvent.all(),
+  }
+
   renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => (
     <ListItem
       title={item.event.name}
       subtitle={format(item.timestamp, 'h:mm:ss a')}
       hideChevron
-      onPress={() => ToastAndroid.show('Long press an item to delete it.', ToastAndroid.SHORT)}
+      onPress={() => ToastAndroid.show('Long press an event to delete it.', ToastAndroid.SHORT)}
       onLongPress={() => this.onEventLongPressed(item)}
     />
   )
@@ -76,7 +79,8 @@ class LogScreen extends Component<NavigationScreenProps & Props & DispatchProp> 
   }
 
   onDeleteConfirmed = (event: TrackedEventModel) => {
-    this.props.dispatch(trackedEventDeleted(event))
+    TrackedEvent.delete(event)
+    this.setState((state) => ({ ...state, events: TrackedEvent.all() }))
   }
 
   renderEmptyView = () => (
@@ -86,11 +90,11 @@ class LogScreen extends Component<NavigationScreenProps & Props & DispatchProp> 
   )
 
   render() {
-    if (!this.props.events.length) {
+    if (!this.state.events.length) {
       return this.renderEmptyView()
     }
 
-    const sections = createSections(groupEventsByDay(this.props.events))
+    const sections = createSections(groupEventsByDay(this.state.events))
 
     return (
       <View style={styles.container}>
@@ -106,5 +110,5 @@ class LogScreen extends Component<NavigationScreenProps & Props & DispatchProp> 
   }
 }
 
-const mapStateToProps = (state: RootState) => ({ nav: state.nav, events: state.trackedEvent.trackedEvents })
+const mapStateToProps = (state: RootState) => ({ nav: state.nav })
 export default connect(mapStateToProps)(LogScreen)
