@@ -33,7 +33,7 @@ interface State {
 export default class EventDetailScreen extends Component<NavigationScreenProps, State> {
   state = {
     event: Event.getById(this.props.navigation.getParam('eventId')),
-    trackedEvents: TrackedEvent.getByEventId(this.props.navigation.getParam('eventId')).sorted('timestamp', true),
+    trackedEvents: TrackedEvent.getByEventId(this.props.navigation.getParam('eventId')).sorted('timestamp'),
   }
 
   formatTimestamp = (timestamp: Date) => format(timestamp, 'MM/DD/YY hh:mm:ss')
