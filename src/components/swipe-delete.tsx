@@ -20,6 +20,7 @@ interface Props {
 
 export const SwipeDelete = (props: Props) => (
   <Swipeout
+    {...props}
     backgroundColor={Color.White}
     right={[
       {

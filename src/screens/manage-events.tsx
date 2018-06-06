@@ -2,14 +2,14 @@ import React from 'react'
 import { Component } from 'react'
 import { StyleSheet, Alert, ScrollView } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
-import { Icon, ListItem } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { connect, DispatchProp } from 'react-redux'
-import Swipeout from 'react-native-swipeout'
 
 import { Color } from '../colors'
 import { Event, EventModel } from '../model/realm'
 import { RootState } from '../redux/store'
 import { Screen } from '../routes'
+import { SwipeDelete } from '../components/swipe-delete'
 
 const styles = StyleSheet.create({
   container: {
@@ -27,18 +27,6 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
   state = {
     events: Event.all(),
   }
-
-  getDeleteButton = (event: EventModel) => ({
-    component: (
-      <Icon
-        name="delete"
-        color={Color.White}
-        containerStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-      />
-    ),
-    backgroundColor: Color.Red,
-    onPress: () => this.onDeleteRequested(event),
-  })
 
   onEventPressed = (event: EventModel) => {
     this.props.navigation.navigate(Screen.EventDetail, {
@@ -63,13 +51,13 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
     return (
       <ScrollView style={styles.container}>
         {this.state.events.map((event) => (
-          <Swipeout key={event.id} backgroundColor={Color.White} right={[this.getDeleteButton(event)]}>
+          <SwipeDelete key={event.id} onClick={() => this.onDeleteRequested(event)}>
             <ListItem
               title={event.name}
               onPress={() => this.onEventPressed(event)}
               onLongPress={() => this.onDeleteRequested(event)}
             />
-          </Swipeout>
+          </SwipeDelete>
         ))}
       </ScrollView>
     )
