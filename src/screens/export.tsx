@@ -1,13 +1,14 @@
 import React from 'react'
 import { Component } from 'react'
-import { Button, StyleSheet, ToastAndroid, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, ToastAndroid, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { format } from 'date-fns'
-import { Text } from 'react-native-elements'
 import RNFetchBlob from 'react-native-fetch-blob'
 
 import { Color } from '../colors'
 import { TrackedEvent } from '../model/realm'
+import { Exporter } from '../components/export/exporter'
+import { ExportComplete } from '../components/export/export-complete'
 
 const styles = StyleSheet.create({
   container: {
@@ -16,50 +17,58 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Color.White,
   },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
 })
 
 interface State {
   exporting: boolean
-  fileName: string
+  filename: string
 }
 
 export default class ExportScreen extends Component<NavigationScreenProps, State> {
   state = {
     exporting: false,
-    fileName: '',
+    filename: '',
   }
 
-  onShareClicked = async () => {
-    const fileName = `life-${format(new Date(), 'YYYYMMDDHHmmss')}.csv`
-    this.setState((state) => ({ ...state, exporting: true, fileName }))
+  onExportClicked = async () => {
+    const filename = `life-${format(new Date(), 'YYYYMMDDHHmmss')}.csv`
+    this.setState((state) => ({ ...state, exporting: true }))
 
     const events = TrackedEvent.all()
     const header = 'name,timestamp\n'
     const data = events.map((event) => `"${event.event.name}",${format(event.timestamp)}`).join('\n')
 
     try {
-      await RNFetchBlob.fs.writeFile(`${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`, `${header}${data}`, 'utf8')
+      await RNFetchBlob.fs.writeFile(`${RNFetchBlob.fs.dirs.DownloadDir}/${filename}`, `${header}${data}`, 'utf8')
     } catch (err) {
       ToastAndroid.show('Failed to export your events.', ToastAndroid.SHORT)
     }
 
-    this.setState((state) => ({ ...state, exporting: false }))
+    this.setState((state) => ({ ...state, exporting: false, filename }))
   }
 
-  renderExporting = () => <Text>Exporting..</Text>
-  renderDone = () => <Text>Your events have been exported to your download directory as {this.state.fileName}</Text>
-
   render() {
-    let view
-
     if (this.state.exporting) {
-      view = this.renderExporting()
-    } else if (this.state.fileName) {
-      view = this.renderDone()
-    } else {
-      view = <Button title="testing" onPress={this.onShareClicked} />
+      return (
+        <View style={[styles.container, styles.horizontal]}>
+          <ActivityIndicator size="large" color={Color.Blue} />
+        </View>
+      )
     }
 
-    return <View style={styles.container}>{view}</View>
+    return (
+      <View style={styles.container}>
+        {!this.state.filename.length ? (
+          <Exporter onExportClicked={this.onExportClicked} />
+        ) : (
+          <ExportComplete filename={this.state.filename} />
+        )}
+      </View>
+    )
   }
 }
