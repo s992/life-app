@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { StyleSheet, View, ListRenderItemInfo, Alert } from 'react-native'
+import { StyleSheet, ListRenderItemInfo, Alert, ScrollView } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { ListItem } from 'react-native-elements'
 import { connect, DispatchProp } from 'react-redux'
@@ -56,7 +56,7 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {this.state.events.map((event) => (
           <ListItem
             key={event.id}
@@ -65,7 +65,7 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
             onLongPress={() => this.onEventLongPressed(event)}
           />
         ))}
-      </View>
+      </ScrollView>
     )
   }
 }
