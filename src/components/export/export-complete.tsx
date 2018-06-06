@@ -14,16 +14,20 @@ const styles = StyleSheet.create({
   },
   innerWrapper: {
     alignItems: 'center',
+  },
+  header: {
+    height: '30%',
     justifyContent: 'center',
+  },
+  body: {
+    height: '70%',
   },
   centered: {
     textAlign: 'center',
   },
-  header: {
-    marginBottom: 35,
-  },
   filename: {
     color: Color.Red,
+    marginTop: 4,
   },
 })
 
@@ -33,12 +37,12 @@ interface Props {
 
 export const ExportComplete = (props: Props) => (
   <View style={styles.container}>
-    <View style={styles.innerWrapper}>
+    <View style={[styles.innerWrapper, styles.header]}>
       <Text h3 style={[styles.centered, styles.header]}>
         Export Successful
       </Text>
     </View>
-    <View style={styles.innerWrapper}>
+    <View style={[styles.innerWrapper, styles.body]}>
       <Text style={styles.centered}>Your export is in your Downloads folder as</Text>
       <Text style={styles.filename}>{props.filename}</Text>
     </View>
