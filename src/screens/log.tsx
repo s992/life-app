@@ -10,6 +10,7 @@ import { Color } from '../colors'
 import { TrackedEvent, TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
 import { RootState } from '../redux/store'
+import { SwipeDelete } from '../components/swipe-delete'
 
 const styles = StyleSheet.create({
   container: {
@@ -62,16 +63,18 @@ class LogScreen extends Component<NavigationScreenProps & DispatchProp, State> {
   }
 
   renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => (
-    <ListItem
-      title={item.event.name}
-      subtitle={format(item.timestamp, 'h:mm:ss a')}
-      hideChevron
-      onPress={() => ToastAndroid.show('Long press an event to delete it.', ToastAndroid.SHORT)}
-      onLongPress={() => this.onEventLongPressed(item)}
-    />
+    <SwipeDelete onClick={() => this.onDeleteRequested(item)}>
+      <ListItem
+        title={item.event.name}
+        subtitle={format(item.timestamp, 'h:mm:ss a')}
+        hideChevron
+        onPress={() => ToastAndroid.show('Long press an event to delete it.', ToastAndroid.SHORT)}
+        onLongPress={() => this.onDeleteRequested(item)}
+      />
+    </SwipeDelete>
   )
 
-  onEventLongPressed = (event: TrackedEventModel) => {
+  onDeleteRequested = (event: TrackedEventModel) => {
     Alert.alert('Are you sure?', 'Once you delete this event, it cannot be recovered.', [
       { text: 'Cancel' },
       { text: 'Delete', onPress: () => this.onDeleteConfirmed(event) },
