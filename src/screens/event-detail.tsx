@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { Card, ListItem } from 'react-native-elements'
-import { format } from 'date-fns'
+import { differenceInCalendarDays, format } from 'date-fns'
 
 import { Color } from '../colors'
 import { Event, EventModel, TrackedEvent, TrackedEventModel } from '../model/realm'
@@ -25,15 +25,28 @@ const styles = StyleSheet.create({
   },
 })
 
+enum Frequency {
+  Daily,
+  Weekly,
+  Monthly,
+}
+
 interface State {
   event: EventModel
   trackedEvents: ReadonlyArray<TrackedEventModel>
+  selectedFrequency: Frequency
+  frequency?: {
+    [Frequency.Daily]: number
+    [Frequency.Weekly]: number
+    [Frequency.Monthly]: number
+  }
 }
 
 export default class EventDetailScreen extends Component<NavigationScreenProps, State> {
-  state = {
+  state: State = {
     event: Event.getById(this.props.navigation.getParam('eventId')),
     trackedEvents: TrackedEvent.getByEventId(this.props.navigation.getParam('eventId')).sorted('timestamp'),
+    selectedFrequency: Frequency.Daily,
   }
 
   formatTimestamp = (timestamp: Date) => format(timestamp, 'MM/DD/YY hh:mm:ss')
@@ -51,8 +64,51 @@ export default class EventDetailScreen extends Component<NavigationScreenProps, 
     this.props.navigation.pop()
   }
 
+  cycleFrequency = () => {
+    let next = this.state.selectedFrequency + 1
+
+    if (next > 2) {
+      next = 0
+    }
+
+    this.setState((state) => ({ ...state, selectedFrequency: next }))
+  }
+
+  getFrequency() {
+    const all = TrackedEvent.all().sorted('timestamp', true)
+    const first = all[0].timestamp
+    const last = all[all.length - 1].timestamp
+    const dayDiff = Math.max(1, differenceInCalendarDays(first, last))
+    const byDay = this.state.trackedEvents.length / dayDiff
+    const byWeek = byDay * 7
+    const byMonth = byDay * 30
+
+    return {
+      [Frequency.Daily]: byDay,
+      [Frequency.Weekly]: byWeek,
+      [Frequency.Monthly]: byMonth,
+    }
+  }
+
+  getFrequencyString() {
+    switch (this.state.selectedFrequency) {
+      case Frequency.Daily:
+        return ' / day'
+      case Frequency.Weekly:
+        return ' / wk'
+      case Frequency.Monthly:
+        return ' / mo'
+    }
+  }
+
+  componentDidMount() {
+    const frequency = this.getFrequency()
+
+    this.setState((state) => ({ ...state, frequency }))
+  }
+
   render() {
-    const { event, trackedEvents } = this.state
+    const { event, trackedEvents, frequency, selectedFrequency } = this.state
     const firstTrack = trackedEvents[0]
     const lastTrack = trackedEvents[trackedEvents.length - 1]
     const firstTimestamp = firstTrack ? this.formatTimestamp(firstTrack.timestamp) : 'Never'
@@ -67,6 +123,15 @@ export default class EventDetailScreen extends Component<NavigationScreenProps, 
             rightTitleStyle={styles.listRightTitle}
             hideChevron
           />
+          {frequency && (
+            <ListItem
+              title="Frequency"
+              rightTitle={`${frequency[selectedFrequency].toFixed(2)}${this.getFrequencyString()}`}
+              rightTitleStyle={styles.listRightTitle}
+              onPress={this.cycleFrequency}
+              hideChevron
+            />
+          )}
           <ListItem
             title="Last tracked"
             rightTitle={lastTimestamp}
