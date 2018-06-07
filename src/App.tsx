@@ -5,6 +5,7 @@ import { Header } from 'react-native-elements'
 import { initializeListeners } from 'react-navigation-redux-helpers'
 import { Provider, connect, Dispatch } from 'react-redux'
 import { NavigationActions, NavigationDispatch, NavigationState } from 'react-navigation'
+import SplashScreen from 'react-native-splash-screen'
 
 import { Color } from './colors'
 import { RootDrawer, Screen } from './routes'
@@ -31,6 +32,7 @@ class App extends Component<Props> {
   componentDidMount() {
     initializeListeners(ROOT, this.props.nav)
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+    SplashScreen.hide()
   }
 
   componentWillUnmount() {
