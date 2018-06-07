@@ -11,6 +11,7 @@ import { TrackedEvent, TrackedEventModel } from '../model/realm'
 import { LogHeader } from '../components/log/log-header'
 import { RootState } from '../redux/store'
 import { SwipeDelete } from '../components/swipe-delete'
+import { Loader } from '../components/export/loader'
 
 const styles = StyleSheet.create({
   container: {
@@ -54,12 +55,13 @@ const createSections = (groupedItems: TrackedEventsByDate) =>
   Object.keys(groupedItems).map((key) => ({ title: key, data: groupedItems[key] }))
 
 interface State {
-  events: ReadonlyArray<TrackedEventModel>
+  events?: ReadonlyArray<TrackedEventModel>
+  loading: boolean
 }
 
 class LogScreen extends Component<NavigationScreenProps & DispatchProp, State> {
-  state = {
-    events: TrackedEvent.all(),
+  state: State = {
+    loading: true,
   }
 
   renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => (
@@ -92,8 +94,18 @@ class LogScreen extends Component<NavigationScreenProps & DispatchProp, State> {
     </View>
   )
 
+  componentDidMount() {
+    const events = TrackedEvent.all()
+
+    this.setState((state) => ({ ...state, events, loading: false }))
+  }
+
   render() {
-    if (!this.state.events.length) {
+    if (this.state.loading) {
+      return <Loader />
+    }
+
+    if (!this.state.events || !this.state.events.length) {
       return this.renderEmptyView()
     }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { ActivityIndicator, StyleSheet, ToastAndroid, View } from 'react-native'
+import { StyleSheet, ToastAndroid, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { format } from 'date-fns'
 import RNFetchBlob from 'react-native-fetch-blob'
@@ -9,6 +9,7 @@ import { Color } from '../colors'
 import { TrackedEvent } from '../model/realm'
 import { Exporter } from '../components/export/exporter'
 import { ExportComplete } from '../components/export/export-complete'
+import { Loader } from '../components/export/loader'
 
 const styles = StyleSheet.create({
   container: {
@@ -54,11 +55,7 @@ export default class ExportScreen extends Component<NavigationScreenProps, State
 
   render() {
     if (this.state.exporting) {
-      return (
-        <View style={[styles.container, styles.horizontal]}>
-          <ActivityIndicator size="large" color={Color.Blue} />
-        </View>
-      )
+      return <Loader />
     }
 
     return (
