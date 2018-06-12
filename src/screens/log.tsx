@@ -41,7 +41,7 @@ const renderHeader = ({ section: { title } }: { section: SectionListData<Tracked
 )
 const groupEventsByDay = (events: ReadonlyArray<TrackedEventModel>) =>
   events.reduce((accum: TrackedEventsByDate, event) => {
-    const date = format(event.timestamp, 'MM/DD/YY')
+    const date = format(event.timestamp, 'ddd, MM/DD/YY')
 
     if (!accum[date]) {
       accum[date] = []
