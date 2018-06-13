@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { Alert, Linking, TouchableWithoutFeedback, View } from 'react-native'
+import { Alert, NativeModules, TouchableWithoutFeedback, View } from 'react-native'
 import { Button, FormLabel, FormInput, CheckBox } from 'react-native-elements'
 import RNCalendarEvents from 'react-native-calendar-events'
 
@@ -26,23 +26,29 @@ export class AddEventForm extends Component<Props, State> {
   onChangeText = (value: string) => this.setState((state) => ({ ...state, value }))
 
   onCalendarSyncToggled = async () => {
+    const enabled = !this.state.calendarSync
+
     this.blurInput()
+    this.setState((state) => ({ ...state, calendarSync: enabled }))
 
-    const canOpen = await Linking.canOpenURL('package:org.swalsh.life')
-
-    console.log(canOpen)
-
-    const permitted = await RNCalendarEvents.authorizeEventStore()
-
-    if (permitted) {
-      Alert.alert(
-        'Unable to sync with calendar',
-        'You must grant calendar permissions to Life in order to sync events.',
-      )
+    if (!enabled) {
       return
     }
 
-    this.setState((state) => ({ ...state, calendarSync: !state.calendarSync }))
+    const permitted = await RNCalendarEvents.authorizeEventStore()
+
+    if (!permitted) {
+      Alert.alert(
+        'Unable to sync with calendar',
+        'You must grant calendar permissions to Life in order to sync events.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'OK', onPress: () => NativeModules.SettingsOpener.openSettings() },
+        ],
+      )
+
+      this.setState((state) => ({ ...state, calendarSync: false }))
+    }
   }
 
   onClick = () => this.props.onSave(this.state.value, this.state.calendarSync)
