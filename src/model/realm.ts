@@ -114,7 +114,7 @@ function createDefaultEvents(realm: Realm) {
 
   db.write(() => {
     defaultEvents.forEach((name) => {
-      realm.create(Model.Event, { id: uuid(), name })
+      realm.create(Model.Event, { id: uuid(), name, calendarSync: false })
     })
   })
 }
