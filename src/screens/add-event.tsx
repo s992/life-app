@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
 })
 
 class AddEventScreen extends Component<NavigationScreenProps & DispatchProp> {
-  onSave = (eventText: string) => {
-    Event.create(eventText)
+  onSave = (eventText: string, calendarSync: boolean) => {
+    Event.create(eventText, calendarSync)
     this.props.navigation.pop()
   }
 

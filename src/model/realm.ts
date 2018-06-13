@@ -1,5 +1,6 @@
 import Realm from 'realm'
 import uuid from 'uuid'
+import RNCalendarEvents from 'react-native-calendar-events'
 
 export enum Model {
   Event = 'Event',
@@ -9,6 +10,7 @@ export enum Model {
 export interface EventModel {
   id: string
   name: string
+  calendarSync: boolean
 }
 
 export interface TrackedEventModel {
@@ -24,11 +26,12 @@ export class Event {
     properties: {
       id: 'string',
       name: 'string',
+      calendarSync: 'bool',
     },
   }
 
-  static create(name: string) {
-    db.write(() => db.create(Model.Event, { id: uuid(), name }))
+  static create(name: string, calendarSync = false) {
+    db.write(() => db.create(Model.Event, { id: uuid(), name, calendarSync }))
   }
 
   static delete(event: EventModel) {
@@ -58,8 +61,25 @@ export class TrackedEvent {
     },
   }
 
-  static create(event: EventModel) {
-    db.write(() => db.create(Model.TrackedEvent, { id: uuid(), timestamp: new Date(), event }))
+  static async create(event: EventModel) {
+    const timestamp = new Date()
+
+    db.write(() => db.create(Model.TrackedEvent, { id: uuid(), timestamp, event }))
+
+    if (event.calendarSync) {
+      const calendars = await RNCalendarEvents.findCalendars()
+      const primary = calendars.find((calendar) => calendar.isPrimary)
+
+      if (!primary) {
+        return
+      }
+
+      await RNCalendarEvents.saveEvent(event.name, {
+        calendarId: primary.id,
+        startDate: timestamp,
+        endDate: timestamp,
+      })
+    }
   }
 
   static delete(trackedEvent: TrackedEventModel) {
@@ -99,7 +119,21 @@ function createDefaultEvents(realm: Realm) {
   })
 }
 
-const db = new Realm({ schema: [Event, TrackedEvent] })
+const db = new Realm({
+  schema: [Event, TrackedEvent],
+  schemaVersion: 1,
+  migration: (oldRealm, newRealm) => {
+    if (oldRealm.schemaVersion === 1) {
+      return
+    }
+
+    const newObjects = newRealm.objects<EventModel>(Model.Event)
+
+    for (let i = 0; i < newObjects.length; i++) {
+      newObjects[i].calendarSync = newObjects[i].calendarSync || false
+    }
+  },
+})
 
 createDefaultEvents(db)
 
