@@ -2,11 +2,18 @@ package org.swalsh.life;
 
 import android.os.Bundle;
 
+import com.calendarevents.CalendarEventsPackage;
 import com.facebook.react.ReactActivity;
 
 import org.devio.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        CalendarEventsPackage.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this);
