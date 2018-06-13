@@ -28,8 +28,8 @@ class ListScreen extends Component<NavigationScreenProps & DispatchProp, State> 
     events: Event.all(),
   }
 
-  onItemSelected = (event: EventModel) => {
-    TrackedEvent.create(event)
+  onItemSelected = async (event: EventModel) => {
+    await TrackedEvent.create(event)
     this.props.navigation.navigate(Screen.Home)
   }
 

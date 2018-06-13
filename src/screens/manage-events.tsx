@@ -17,6 +17,12 @@ const styles = StyleSheet.create({
     backgroundColor: Color.White,
     width: '100%',
   },
+  bigPadding: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
 })
 
 interface State {
@@ -53,6 +59,7 @@ class ManageEventsScreen extends Component<NavigationScreenProps & DispatchProp,
         {this.state.events.map((event) => (
           <SwipeDelete key={event.id} onClick={() => this.onDeleteRequested(event)}>
             <ListItem
+              containerStyle={styles.bigPadding}
               title={event.name}
               onPress={() => this.onEventPressed(event)}
               onLongPress={() => this.onDeleteRequested(event)}

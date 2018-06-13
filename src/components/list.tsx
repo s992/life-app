@@ -20,13 +20,24 @@ const styles = StyleSheet.create({
   flatList: {
     width: '100%',
   },
+  bigPadding: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
 })
 
 export class List extends Component<Props> {
   keyExtractor = (event: EventModel) => event.id
 
   renderItem = ({ item }: ListRenderItemInfo<EventModel>) => (
-    <ListItem title={item.name} onPress={() => this.props.onClick(item)} hideChevron />
+    <ListItem
+      containerStyle={styles.bigPadding}
+      title={item.name}
+      onPress={() => this.props.onClick(item)}
+      hideChevron
+    />
   )
 
   render() {
