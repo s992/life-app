@@ -6,15 +6,15 @@ import { Color } from '../../colors'
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Color.Yellow,
-    flex: 1,
-    borderBottomColor: Color.Black,
-    borderBottomWidth: 1,
-    padding: 12,
+    paddingLeft: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
+    borderBottomColor: Color.Yellow,
+    borderBottomWidth: 2,
   },
   headerText: {
-    textAlign: 'center',
-    fontWeight: 'bold',
+    // textAlign: 'center',
+    // fontWeight: 'bold',
   },
 })
 
