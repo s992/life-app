@@ -9,12 +9,11 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingTop: 12,
     paddingBottom: 8,
-    borderBottomColor: Color.Yellow,
+    borderBottomColor: Color.Green,
     borderBottomWidth: 2,
   },
   headerText: {
-    // textAlign: 'center',
-    // fontWeight: 'bold',
+    color: Color.Black,
   },
 })
 
