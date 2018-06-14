@@ -3,6 +3,7 @@ package org.swalsh.life;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.calendarevents.CalendarEventsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SnackbarPackage(),
             new CalendarEventsPackage(),
             new SplashScreenReactPackage(),
             new RNFetchBlobPackage(),
