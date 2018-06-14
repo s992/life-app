@@ -74,7 +74,7 @@ export class AddEventForm extends Component<Props, State> {
           <FormLabel>Sync with calendar?</FormLabel>
           <CheckBox
             center
-            containerStyle={{ backgroundColor: Color.White }}
+            containerStyle={{ backgroundColor: Color.White, borderWidth: 0 }}
             checkedColor={Color.Blue}
             checked={this.state.calendarSync}
             onPress={this.onCalendarSyncToggled}
