@@ -30,6 +30,8 @@ build/
 local.properties
 *.iml
 fabric.properties
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
 
 # node.js
 #
