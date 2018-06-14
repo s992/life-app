@@ -4,9 +4,11 @@ import { Alert, StyleSheet, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { Card, ListItem } from 'react-native-elements'
 import { differenceInCalendarDays, format } from 'date-fns'
+import { connect } from 'react-redux'
 
 import { Color } from '../colors'
 import { Event, EventModel, TrackedEvent, TrackedEventModel } from '../model/realm'
+import { RootState } from '../redux/store'
 
 const styles = StyleSheet.create({
   container: {
@@ -42,7 +44,7 @@ interface State {
   }
 }
 
-export default class EventDetailScreen extends Component<NavigationScreenProps, State> {
+class EventDetailScreen extends Component<NavigationScreenProps, State> {
   state: State = {
     event: Event.getById(this.props.navigation.getParam('eventId')),
     trackedEvents: TrackedEvent.getByEventId(this.props.navigation.getParam('eventId')).sorted('timestamp'),
@@ -99,6 +101,15 @@ export default class EventDetailScreen extends Component<NavigationScreenProps, 
       case Frequency.Monthly:
         return ' / mo'
     }
+  }
+
+  // kind of gross that i have to do this because react native navigation doesn't actually unmount stuff
+  // in stacknavigation, so i need to listen for the route change and update it. this is necessary because
+  // we're popping off the stack after we edit the event if the user chooses to do so
+  componentWillReceiveProps() {
+    const event = Event.getById(this.props.navigation.getParam('eventId'))
+
+    this.setState((state) => ({ ...state, event }))
   }
 
   componentDidMount() {
@@ -158,3 +169,6 @@ export default class EventDetailScreen extends Component<NavigationScreenProps, 
     )
   }
 }
+
+const mapStateToProps = (state: RootState) => ({ nav: state.nav })
+export default connect(mapStateToProps)(EventDetailScreen)

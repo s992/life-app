@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { StackNavigator, DrawerNavigator } from 'react-navigation'
+import { StackNavigator, DrawerNavigator, NavigationState } from 'react-navigation'
 
 import { Color } from './colors'
 import {
@@ -22,6 +22,17 @@ export enum Screen {
   ManageEvents = 'ManageEvents',
   Export = 'Export Events',
   EventDetail = 'EventDetail',
+}
+
+// not sure why the interface here sucks
+type Route = NavigationState & { routeName: string; params: { [key: string]: string } }
+
+export function getActiveRoute(navState: NavigationState): Route {
+  if (navState.hasOwnProperty('index')) {
+    return getActiveRoute(navState.routes[navState.index])
+  }
+
+  return navState as Route
 }
 
 const styles = StyleSheet.create({

@@ -34,6 +34,10 @@ export class Event {
     db.write(() => db.create(Model.Event, { id: uuid(), name, calendarSync }))
   }
 
+  static update(id: string, name: string, calendarSync: boolean) {
+    db.write(() => db.create(Model.Event, { id, name, calendarSync }, true))
+  }
+
   static delete(event: EventModel) {
     db.write(() => {
       const orphans = TrackedEvent.getByEventId(event.id)

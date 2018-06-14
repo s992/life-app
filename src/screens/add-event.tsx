@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation'
 import { connect, DispatchProp } from 'react-redux'
 
 import { Color } from '../colors'
-import { Event } from '../model/realm'
+import { Event, EventModel } from '../model/realm'
 import { AddEventForm } from '../components/settings/add-form'
 import { RootState } from '../redux/store'
 
@@ -16,16 +16,39 @@ const styles = StyleSheet.create({
   },
 })
 
-class AddEventScreen extends Component<NavigationScreenProps & DispatchProp> {
+interface State {
+  event?: EventModel
+}
+
+class AddEventScreen extends Component<NavigationScreenProps & DispatchProp, State> {
+  state: State = {}
+
   onSave = (eventText: string, calendarSync: boolean) => {
-    Event.create(eventText, calendarSync)
+    if (this.state.event) {
+      Event.update(this.state.event.id, eventText, calendarSync)
+    } else {
+      Event.create(eventText, calendarSync)
+    }
+
     this.props.navigation.pop()
+  }
+
+  componentDidMount() {
+    const eventId = this.props.navigation.getParam('eventId')
+
+    if (!eventId) {
+      return
+    }
+
+    const event = Event.getById(eventId)
+
+    this.setState((state) => ({ ...state, event }))
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <AddEventForm onSave={this.onSave} />
+        <AddEventForm onSave={this.onSave} event={this.state.event} />
       </View>
     )
   }

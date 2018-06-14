@@ -8,7 +8,7 @@ import { NavigationActions, NavigationDispatch, NavigationState } from 'react-na
 import SplashScreen from 'react-native-splash-screen'
 
 import { Color } from './colors'
-import { RootDrawer, Screen } from './routes'
+import { getActiveRoute, RootDrawer, Screen } from './routes'
 import { HeaderIcon } from './components/header-icon'
 import { RootState, store } from './redux/store'
 import { navigationPropConstructor, ROOT, toggleDrawer } from './redux/nav'
@@ -80,21 +80,30 @@ class App extends Component<Props> {
     return this.maybeExit()
   }
 
+  boundEdit = (eventId: string) => () => {
+    this.props.dispatch(NavigationActions.navigate({ routeName: Screen.AddEvent, params: { eventId } }))
+  }
+
   render() {
     const navigation = navigationPropConstructor(this.props.dispatch, this.props.nav)
     const isBackable = this.isBackable()
     const leftIcon = isBackable ? 'arrow-back' : 'menu'
     const leftAction = isBackable ? NavigationActions.back() : toggleDrawer()
+    const activeRoute = getActiveRoute(this.props.nav)
+    const rightIcon = activeRoute.routeName === Screen.EventDetail ? 'edit' : undefined
 
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor={Color.Black} barStyle='light-content' />
+        <StatusBar backgroundColor={Color.Black} barStyle="light-content" />
         <Header
           leftComponent={<HeaderIcon name={leftIcon} onClick={() => this.props.dispatch(leftAction)} />}
           centerComponent={{
             text: 'LIFE',
             style: { color: Color.White },
           }}
+          rightComponent={
+            rightIcon ? <HeaderIcon name={rightIcon} onClick={this.boundEdit(activeRoute.params.eventId)} /> : undefined
+          }
           backgroundColor={Color.Black}
         />
         <RootDrawer navigation={navigation} />

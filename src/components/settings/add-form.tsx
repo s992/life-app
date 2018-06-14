@@ -5,6 +5,7 @@ import { Button, FormLabel, FormInput, CheckBox } from 'react-native-elements'
 import RNCalendarEvents from 'react-native-calendar-events'
 
 import { Color } from '../../colors'
+import { EventModel } from '../../model/realm'
 
 const styles = StyleSheet.create({
   checkboxText: {
@@ -20,6 +21,7 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
+  event?: EventModel
   onSave: (eventText: string, calendarSync: boolean) => void
 }
 
@@ -72,10 +74,20 @@ export class AddEventForm extends Component<Props, State> {
 
   componentDidMount() {
     setTimeout(() => {
-      if (this.input.current) {
+      if (!this.props.event && this.input.current) {
         this.input.current.focus()
       }
     }, 100)
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { event } = nextProps
+
+    if (!event) {
+      return
+    }
+
+    this.setState((state) => ({ ...state, value: event.name, calendarSync: event.calendarSync }))
   }
 
   render() {
@@ -83,7 +95,7 @@ export class AddEventForm extends Component<Props, State> {
       <TouchableWithoutFeedback onPress={this.blurInput}>
         <View>
           <FormLabel>What do you want to track?</FormLabel>
-          <FormInput ref={this.input} onChangeText={this.onChangeText} />
+          <FormInput ref={this.input} defaultValue={this.state.value} onChangeText={this.onChangeText} />
           <CheckBox
             title="Sync with calendar?"
             containerStyle={styles.checkboxContainer}
