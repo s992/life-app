@@ -3,6 +3,7 @@ import { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { NavigationScreenProps } from 'react-navigation'
 import { connect, DispatchProp } from 'react-redux'
+import Snackbar from 'react-native-snackbar'
 
 import { Color } from '../colors'
 import { List } from '../components/list'
@@ -30,6 +31,17 @@ class ListScreen extends Component<NavigationScreenProps & DispatchProp, State> 
 
   onItemSelected = async (event: EventModel) => {
     await TrackedEvent.create(event)
+
+    Snackbar.show({
+      title: 'Event logged successfully.',
+      backgroundColor: Color.Black,
+      duration: Snackbar.LENGTH_LONG,
+      action: {
+        title: '✕',
+        color: Color.White,
+      },
+    })
+
     this.props.navigation.navigate(Screen.Home)
   }
 
