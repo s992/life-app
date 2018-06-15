@@ -15,19 +15,27 @@ const styles = StyleSheet.create({
 
 interface Props {
   children: any
-  onClick: () => void
+  onEdit: () => void
+  onDelete: () => void
 }
 
-export const SwipeDelete = (props: Props) => (
+export const SwipeEditOrDelete = (props: Props) => (
   <Swipeout
     {...props}
     autoClose
     backgroundColor={Color.White}
+    left={[
+      {
+        component: <Icon name="edit" color={Color.White} containerStyle={styles.container} />,
+        backgroundColor: Color.Blue,
+        onPress: props.onEdit,
+      },
+    ]}
     right={[
       {
         component: <Icon name="delete" color={Color.White} containerStyle={styles.container} />,
         backgroundColor: Color.Red,
-        onPress: props.onClick,
+        onPress: props.onDelete,
       },
     ]}
   >

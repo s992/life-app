@@ -86,6 +86,10 @@ export class TrackedEvent {
     }
   }
 
+  static update(id: string, timestamp: Date) {
+    db.write(() => db.create(Model.TrackedEvent, { id, timestamp }, true))
+  }
+
   static delete(trackedEvent: TrackedEventModel) {
     db.write(() => db.delete(trackedEvent))
   }
