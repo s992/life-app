@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'kotlin-android'
 
 import com.android.build.OutputFile
 
@@ -183,6 +184,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // Run this once to be able to run the application with BUCK
@@ -194,6 +196,9 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 afterEvaluate {
     initFabricPropertiesIfNeeded()
+}
+repositories {
+    mavenCentral()
 }
 
 def initFabricPropertiesIfNeeded() {
