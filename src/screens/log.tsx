@@ -80,7 +80,7 @@ class LogScreen extends Component<NavigationScreenProps & DispatchProp, State> {
     <SwipeEditOrDelete onDelete={() => this.onDeleteRequested(item)} onEdit={() => this.editRequested(item)}>
       <ListItem
         title={item.event.name}
-        subtitle={format(item.timestamp, 'h:mm:ss a')}
+        subtitle={format(item.timestamp, 'h:mm a')}
         hideChevron
         onLongPress={() => this.onDeleteRequested(item)}
       />
