@@ -78,6 +78,15 @@ class EventDetailScreen extends Component<NavigationScreenProps, State> {
 
   getFrequency() {
     const all = TrackedEvent.all().sorted('timestamp', true)
+
+    if (!all.length) {
+      return {
+        [Frequency.Daily]: 0,
+        [Frequency.Weekly]: 0,
+        [Frequency.Monthly]: 0,
+      }
+    }
+
     const first = all[0].timestamp
     const last = all[all.length - 1].timestamp
     const dayDiff = Math.max(1, differenceInCalendarDays(first, last))
@@ -120,6 +129,11 @@ class EventDetailScreen extends Component<NavigationScreenProps, State> {
 
   render() {
     const { event, trackedEvents, frequency, selectedFrequency } = this.state
+
+    if (!event) {
+      return null
+    }
+
     const firstTrack = trackedEvents[0]
     const lastTrack = trackedEvents[trackedEvents.length - 1]
     const firstTimestamp = firstTrack ? this.formatTimestamp(firstTrack.timestamp) : 'Never'
