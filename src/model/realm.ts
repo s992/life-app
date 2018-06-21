@@ -17,6 +17,7 @@ export interface EventModel {
 export interface TrackedEventModel {
   id: string
   timestamp: Date
+  note?: string
   event: EventModel
 }
 
@@ -63,14 +64,15 @@ export class TrackedEvent {
     properties: {
       id: 'string',
       timestamp: 'date',
+      note: 'string?',
       event: { type: 'Event' },
     },
   }
 
-  static async create(event: EventModel) {
+  static async create(event: EventModel, note?: string) {
     const timestamp = new Date()
 
-    db.write(() => db.create(Model.TrackedEvent, { id: uuid(), timestamp, event }))
+    db.write(() => db.create(Model.TrackedEvent, { id: uuid(), timestamp, event, note }))
 
     if (event.calendarSync) {
       const calendars = await RNCalendarEvents.findCalendars()
@@ -158,6 +160,21 @@ const schemas = [
 
       for (let i = 0; i < newObjects.length; i++) {
         newObjects[i].createdOn = now
+      }
+    },
+  },
+  {
+    schema: [Event, TrackedEvent],
+    schemaVersion: 3,
+    migration: (oldRealm: Realm, newRealm: Realm) => {
+      if (oldRealm.schemaVersion === 3) {
+        return
+      }
+
+      const newObjects = newRealm.objects<TrackedEventModel>(Model.TrackedEvent)
+
+      for (let i = 0; i < newObjects.length; i++) {
+        newObjects[i].note = undefined
       }
     },
   },

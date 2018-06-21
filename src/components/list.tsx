@@ -8,6 +8,7 @@ import { EventModel } from '../model/realm'
 export interface Props {
   events: ReadonlyArray<EventModel>
   onClick: (event: EventModel) => void
+  onLongPress: (event: EventModel) => void
 }
 
 const styles = StyleSheet.create({
@@ -37,6 +38,7 @@ export class List extends Component<Props> {
         containerStyle={styles.bigPadding}
         title={item.name}
         onPress={() => this.props.onClick(item)}
+        onLongPress={() => this.props.onLongPress(item)}
         hideChevron
       />
     )

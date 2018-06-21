@@ -10,11 +10,12 @@ import { List } from '../components/list'
 import { Event, EventModel, TrackedEvent } from '../model/realm'
 import { Screen } from '../routes'
 import { RootState } from '../redux/store'
+import { TrackWithDetail } from '../components/track-with-detail'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: Color.White,
   },
@@ -22,15 +23,34 @@ const styles = StyleSheet.create({
 
 export interface State {
   events: ReadonlyArray<EventModel>
+  selectedEvent?: EventModel
 }
 
 class ListScreen extends Component<NavigationScreenProps & DispatchProp, State> {
   state = {
     events: Event.all().sorted('createdOn'),
+    selectedEvent: undefined,
   }
 
-  onItemSelected = async (event: EventModel) => {
-    await TrackedEvent.create(event)
+  onItemSelected = async (event: EventModel) => this.setState((state) => ({ ...state, selectedEvent: event }))
+
+  onItemSavedWithNote = async (note?: string) => {
+    const event = this.state.selectedEvent
+
+    if (!event) {
+      this.props.navigation.navigate(Screen.Home)
+      return
+    }
+
+    await this.finishSaving(event, note)
+  }
+
+  onItemSaved = async (event: EventModel) => {
+    await this.finishSaving(event)
+  }
+
+  private async finishSaving(event: EventModel, note?: string) {
+    await TrackedEvent.create(event, note)
 
     Snackbar.show({
       title: 'Event logged successfully.',
@@ -48,7 +68,11 @@ class ListScreen extends Component<NavigationScreenProps & DispatchProp, State> 
   render() {
     return (
       <View style={styles.container}>
-        <List events={this.state.events} onClick={this.onItemSelected} />
+        {this.state.selectedEvent ? (
+          <TrackWithDetail onSave={this.onItemSavedWithNote} />
+        ) : (
+          <List events={this.state.events} onClick={this.onItemSaved} onLongPress={this.onItemSelected} />
+        )}
       </View>
     )
   }
