@@ -76,16 +76,27 @@ class LogScreen extends Component<NavigationScreenProps & DispatchProp, State> {
     loading: true,
   }
 
-  renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => (
-    <SwipeEditOrDelete onDelete={() => this.onDeleteRequested(item)} onEdit={() => this.editRequested(item)}>
-      <ListItem
-        title={item.event.name}
-        subtitle={format(item.timestamp, 'h:mm a')}
-        hideChevron
-        onLongPress={() => this.onDeleteRequested(item)}
-      />
-    </SwipeEditOrDelete>
-  )
+  renderItem = ({ item }: ListRenderItemInfo<TrackedEventModel>) => {
+    const timestamp = format(item.timestamp, 'h:mm a')
+    const hasNote = item.note && item.note.length
+    let subtitle = timestamp
+
+    if (hasNote) {
+      subtitle = `${subtitle}\nNote: ${item.note}`
+    }
+
+    return (
+      <SwipeEditOrDelete onDelete={() => this.onDeleteRequested(item)} onEdit={() => this.editRequested(item)}>
+        <ListItem
+          title={item.event.name}
+          subtitle={subtitle}
+          subtitleNumberOfLines={hasNote ? 2 : 1}
+          hideChevron
+          onLongPress={() => this.onDeleteRequested(item)}
+        />
+      </SwipeEditOrDelete>
+    )
+  }
 
   onDeleteRequested = (event: TrackedEventModel) => {
     Alert.alert('Are you sure?', 'Once you delete this event, it cannot be recovered.', [
