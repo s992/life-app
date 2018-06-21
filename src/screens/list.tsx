@@ -26,7 +26,7 @@ export interface State {
 
 class ListScreen extends Component<NavigationScreenProps & DispatchProp, State> {
   state = {
-    events: Event.all(),
+    events: Event.all().sorted('createdOn'),
   }
 
   onItemSelected = async (event: EventModel) => {

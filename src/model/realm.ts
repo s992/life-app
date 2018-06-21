@@ -11,6 +11,7 @@ export interface EventModel {
   id: string
   name: string
   calendarSync: boolean
+  createdOn: Date
 }
 
 export interface TrackedEventModel {
@@ -27,11 +28,12 @@ export class Event {
       id: 'string',
       name: 'string',
       calendarSync: 'bool',
+      createdOn: 'date',
     },
   }
 
   static create(name: string, calendarSync = false) {
-    db.write(() => db.create(Model.Event, { id: uuid(), name, calendarSync }))
+    db.write(() => db.create(Model.Event, { id: uuid(), name, calendarSync, createdOn: new Date() }))
   }
 
   static update(id: string, name: string, calendarSync: boolean) {
@@ -122,26 +124,53 @@ function createDefaultEvents(realm: Realm) {
 
   db.write(() => {
     defaultEvents.forEach((name) => {
-      realm.create(Model.Event, { id: uuid(), name, calendarSync: false })
+      realm.create(Model.Event, { id: uuid(), name, calendarSync: false, createdOn: new Date() })
     })
   })
 }
 
-const db = new Realm({
-  schema: [Event, TrackedEvent],
-  schemaVersion: 1,
-  migration: (oldRealm, newRealm) => {
-    if (oldRealm.schemaVersion === 1) {
-      return
-    }
+const schemas = [
+  {
+    schema: [Event, TrackedEvent],
+    schemaVersion: 1,
+    migration: (oldRealm: Realm, newRealm: Realm) => {
+      if (oldRealm.schemaVersion === 1) {
+        return
+      }
 
-    const newObjects = newRealm.objects<EventModel>(Model.Event)
+      const newObjects = newRealm.objects<EventModel>(Model.Event)
 
-    for (let i = 0; i < newObjects.length; i++) {
-      newObjects[i].calendarSync = newObjects[i].calendarSync || false
-    }
+      for (let i = 0; i < newObjects.length; i++) {
+        newObjects[i].calendarSync = newObjects[i].calendarSync || false
+      }
+    },
   },
-})
+  {
+    schema: [Event, TrackedEvent],
+    schemaVersion: 2,
+    migration: (oldRealm: Realm, newRealm: Realm) => {
+      if (oldRealm.schemaVersion === 2) {
+        return
+      }
+
+      const newObjects = newRealm.objects<EventModel>(Model.Event)
+      const now = new Date()
+
+      for (let i = 0; i < newObjects.length; i++) {
+        newObjects[i].createdOn = now
+      }
+    },
+  },
+]
+
+let nextSchemaIndex = Realm.schemaVersion(Realm.defaultPath)
+
+while (nextSchemaIndex < schemas.length) {
+  const migratedRealm = new Realm(schemas[nextSchemaIndex++])
+  migratedRealm.close()
+}
+
+const db = new Realm(schemas[schemas.length - 1])
 
 createDefaultEvents(db)
 
