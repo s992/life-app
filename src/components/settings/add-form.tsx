@@ -95,7 +95,12 @@ export class AddEventForm extends Component<Props, State> {
       <TouchableWithoutFeedback onPress={this.blurInput}>
         <View>
           <FormLabel>What do you want to track?</FormLabel>
-          <FormInput ref={this.input} defaultValue={this.state.value} onChangeText={this.onChangeText} />
+          <FormInput
+            ref={this.input}
+            defaultValue={this.state.value}
+            onChangeText={this.onChangeText}
+            onSubmitEditing={this.onClick}
+          />
           <CheckBox
             title="Sync with calendar?"
             containerStyle={styles.checkboxContainer}
